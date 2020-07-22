@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "327581997959",
+    "firebase_url": "https://justice-dz.firebaseio.com",
+    "project_id": "justice-dz",
+    "storage_bucket": "justice-dz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327581997959:android:d7efdfe9b15d2694a4d122",
+        "android_client_info": {
+          "package_name": "com.example.justice_dz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327581997959-q9rvu3qi5mhk66vlq0gf30q5v4ij089d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPiWZy6dJtlvKgVLmiJa1L8ZLGFnTgLCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327581997959-q9rvu3qi5mhk66vlq0gf30q5v4ij089d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
