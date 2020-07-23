@@ -1,5 +1,6 @@
 
 import 'package:flutter/foundation.dart';
+import 'package:justice_dz/models/data/Categorie.dart';
 import 'package:justice_dz/models/data/Wilaya.dart';
 
 class Adresse{
@@ -19,5 +20,6 @@ class Person with ChangeNotifier{
   final String horaire;
 
   final Wilaya wilaya;
-  Person({@required this.id, @required this.nom, @required this.prenom, @required this.email, @required this.numPhone, @required this.adresse, @required this.horaire, @required this.wilaya});
+  final Categorie categorie;
+  Person({@required this.id, @required this.nom, @required this.prenom, @required this.email, @required this.numPhone, @required this.adresse, @required this.horaire, @required this.wilaya, @required this.categorie});
 }

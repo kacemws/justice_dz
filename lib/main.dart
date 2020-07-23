@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/presentation/screens/LandingPage.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
         ),
 
         routes: {
-          '/' : (context)=> MainHomePage(),
+          '/' : (context)=> LandingPage(),
+          MainHomePage.route : (context) => MainHomePage(),
           PersonDetails.route : (context)=> PersonDetails(),
         },
       ),

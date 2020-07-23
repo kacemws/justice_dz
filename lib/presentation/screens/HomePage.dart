@@ -11,8 +11,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     var provider = Provider.of<Justicedz>(context, listen: false);
-    var people = provider.peoples;
+    var people = provider.customList();
+
     return LayoutBuilder(
 
       builder: (_,constraints)=>Container(

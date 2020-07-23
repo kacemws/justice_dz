@@ -9,7 +9,7 @@ Justice dz is an app that lets you find lawyers depending on a state. Its made w
 :white_check_mark: init repo. <br/>
 :black_square_button: add logo to the app. <br/>
 :white_check_mark: add firebase to project. <br/>
-:black_square_button: add functions that fetch data. <br/>
+:white_check_mark: add functions that fetch data. <br/>
 :white_check_mark: add homescreen. <br/>
 :white_check_mark: add info card for lawyer. <br/>
 :white_check_mark: add lawyer details screen. <br/>

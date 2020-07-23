@@ -9,6 +9,7 @@ import 'Favourites.dart';
 import 'HomePage.dart';
 
 class MainHomePage extends StatefulWidget {
+  static final String route = "/main-screen";
   @override
   _MainHomePageState createState() => _MainHomePageState();
 }
@@ -21,10 +22,6 @@ class _MainHomePageState extends State<MainHomePage> {
 
     super.initState();
     current = 0;
-
-    Future.delayed(Duration.zero).then((_) async {
-      Provider.of<Justicedz>(context, listen: false).fetchData();
-    });
 
   }
 
