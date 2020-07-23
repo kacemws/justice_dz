@@ -4,6 +4,8 @@ import 'package:justice_dz/models/Justicedz.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:provider/provider.dart';
 
+import 'presentation/screens/PersonDetails.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -62,7 +64,7 @@ class MyApp extends StatelessWidget {
 
         routes: {
           '/' : (context)=> MainHomePage(),
-          // PersonDetails.route : (context)=> BrandDetails(),
+          PersonDetails.route : (context)=> PersonDetails(),
         },
       ),
 

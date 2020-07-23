@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/data/Person.dart';
+import 'package:justice_dz/presentation/screens/PersonDetails.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,106 +31,114 @@ class PersonItem extends StatelessWidget {
 
     return LayoutBuilder(
 
-      builder :(_,constraint)=>Container(
-        height: constraint.maxHeight,
-        width: constraint.maxWidth,
-        
+      builder :(_,constraint)=>GestureDetector(
+        onTap: (){
+          Navigator.of(context).pushNamed(
+            PersonDetails.route,
+            arguments: person.id
+          );
+        },
+        child: Container(
+          height: constraint.maxHeight,
+          width: constraint.maxWidth,
+          
 
-        decoration: BoxDecoration(
-          color: colorCustom,
-          borderRadius: BorderRadius.circular(5),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              color: Colors.black38,
-              offset: const Offset(5,5)
-            ),
-            BoxShadow(
-              blurRadius: 10,
-              color: Colors.white,
-              offset: -Offset(5,5)
-            ),
-          ]
-        ),
-        
-        child: Column(
-          children: <Widget>[
+          decoration: BoxDecoration(
+            color: colorCustom,
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                color: Colors.black38,
+                offset: const Offset(5,5)
+              ),
+              BoxShadow(
+                blurRadius: 10,
+                color: Colors.white,
+                offset: -Offset(5,5)
+              ),
+            ]
+          ),
+          
+          child: Column(
+            children: <Widget>[
 
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: <Widget>[
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
 
-                Hero(
-                  tag: "", 
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5),
-                    ),
+                  Hero(
+                    tag: person.id, 
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
 
-                    child: Image.asset(
-                      "assets/logoJustice.png",
-                      height: constraint.maxHeight *0.72,
-                      width: double.infinity,
-                      fit: BoxFit.scaleDown,
-                    ),
+                      child: Image.asset(
+                        "assets/logoJustice.png",
+                        height: constraint.maxHeight *0.72,
+                        width: double.infinity,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    )
+                  ),
+
+                  Text("Docteur " + person.prenom + " " + person.nom,style: Theme.of(context).textTheme.title.copyWith(
+                    color: Colors.white
+                  ),),
+
+                  space(context)
+
+                ],
+              ),
+              space(context),
+
+              Container(
+
+                height: constraint.maxHeight * 0.2,
+                width: constraint.maxWidth,
+                
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
                   )
                 ),
 
-                Text("Docteur " + person.prenom + " " + person.nom,style: Theme.of(context).textTheme.title.copyWith(
-                  color: Colors.white
-                ),),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
 
-                space(context)
-
-              ],
-            ),
-            space(context),
-
-            Container(
-
-              height: constraint.maxHeight * 0.2,
-              width: constraint.maxWidth,
-              
-              decoration: BoxDecoration(
-                color: Colors.grey[50],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(5),
-                )
+                    IconButton(
+                      icon: Icon(Icons.explore), 
+                      onPressed: (){
+                        launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
+                      }
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.mail), 
+                      onPressed: (){
+                        launch("mailto:"+person.email+"?subject=Reservation&body=");
+                      }
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.phone), 
+                      onPressed: (){
+                        launch("tel:"+person.numPhone);
+                      }
+                    ),
+                  ],
+                ),
               ),
 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
 
-                  IconButton(
-                    icon: Icon(Icons.explore), 
-                    onPressed: (){
-                      launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
-                    }
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.mail), 
-                    onPressed: (){
-                      launch("mailto:"+person.email+"?subject=Reservation&body=");
-                    }
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.phone), 
-                    onPressed: (){
-                      launch("tel:"+person.numPhone);
-                    }
-                  ),
-                ],
-              ),
-            ),
+            ],
+          ),
 
-
-          ],
         ),
-
       ),
     );
   }
