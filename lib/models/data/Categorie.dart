@@ -1,7 +1,7 @@
 
 import 'package:flutter/foundation.dart';
 
-class Categorie{
+class Categorie with ChangeNotifier{
   final String id;
   final String nom;
 

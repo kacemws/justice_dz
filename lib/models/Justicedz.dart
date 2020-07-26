@@ -3,10 +3,12 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:justice_dz/models/data/Categorie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import './data/Categorie.dart';
 import './data/Person.dart';
 import './data/Wilaya.dart';
+import 'data/Commune.dart';
 
 
 class Justicedz with ChangeNotifier{
@@ -14,6 +16,8 @@ class Justicedz with ChangeNotifier{
   bool loaded = false;
 
   final Firestore _db = Firestore.instance;
+
+  SharedPreferences prefs ;
 
   List<Wilaya> wilayas = [
     Wilaya(id: "all", nom: "Tous")
@@ -41,6 +45,8 @@ class Justicedz with ChangeNotifier{
     print(peoples.length);
     return peoples;
   }
+
+  List<Person> favorites = [];
   
   List<Person> customList(){
 
@@ -91,16 +97,22 @@ class Justicedz with ChangeNotifier{
   
 
   Future<void> fetchData() async{
+    prefs = await SharedPreferences.getInstance();
+    loaded = false;
+    notifyListeners();
 
     await this.fetchWilayas();
     print("got wilayas");
+
+    await this.fetchCommunes();
+    print("got Communes");
 
     await this.fetchCategories();
     print("got categories");
 
     await this.fetchPeople();
     print("got people");
-
+    await this.fetchFavs();
     loaded = true;
     print("done");
 
@@ -110,6 +122,11 @@ class Justicedz with ChangeNotifier{
 
   Future<void> fetchWilayas() async{
     var snapshot = await _db.collection("Wilaya").getDocuments();
+    wilayas.clear();
+
+    wilayas.add(
+      Wilaya(id: "all", nom: "Tous")
+    );
 
     snapshot.documents.forEach((document){
 
@@ -127,8 +144,38 @@ class Justicedz with ChangeNotifier{
     });
   }
 
+  Future<void> fetchCommunes() async{
+    var snapshot = await _db.collection("Communes").getDocuments();
+
+    wilayas.forEach((wilaya){
+      wilaya.communes = [];
+    });
+
+    snapshot.documents.forEach((document){
+
+      var data = document.data;
+
+      var aux = Commune(
+        id: document.documentID, 
+        nom: data["nom"], 
+        wilaya: getWilayaById(data["wilaya"])
+      );
+
+      print("got : " + aux.id);
+
+      aux.wilaya.communes.add(aux);
+      
+    });
+  }
+
   Future<void> fetchCategories() async{
     var snapshot = await _db.collection("Categories").getDocuments();
+    categories.clear();
+
+    categories.add(
+      Categorie(id: "all", nom: "Tous")
+    );
+    print("Categories length : "+categories.length.toString());
 
     snapshot.documents.forEach((document){
 
@@ -149,7 +196,7 @@ class Justicedz with ChangeNotifier{
   Future<void> fetchPeople() async{
 
     var snapshot = await _db.collection("People").getDocuments();
-
+    peoples.clear();
     snapshot.documents.forEach((document){
 
       var data = document.data;
@@ -177,6 +224,33 @@ class Justicedz with ChangeNotifier{
       peoples.add(aux);
 
     });
+  }
+
+  Future<void> fetchFavs(){
+    var favs = prefs.getStringList("favorites") ?? [];
+    favorites.clear();
+    favs.forEach((fav){
+      favorites.add(getPersonById(fav));
+    });
+  }
+
+  Future<void> addToFavs(String id) async{
+    var person = getPersonById(id);
+
+    if(favorites.contains(person)){
+
+      favorites.remove(person);
+    }else{
+      favorites.add(person);
+    }
+    List<String> ids = [];
+
+    favorites.forEach((fav){
+      ids.add(fav.id);
+    });
+
+    await prefs.setStringList("favorites", ids);
+    notifyListeners();
   }
 
 

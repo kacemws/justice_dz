@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/presentation/tools/BottomNavigation.dart';
+import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
 
 import 'package:justice_dz/models/Justicedz.dart';
@@ -54,10 +55,7 @@ class _MainHomePageState extends State<MainHomePage> {
       left:true,
 
       child: Scaffold(
-        drawer: Drawer(
-          elevation: 5,
-          child: SizedBox(),
-        ),
+        drawer: CustomDrawer(),
         appBar: _appBar,
         body: Center(
           child: Consumer<Justicedz>(

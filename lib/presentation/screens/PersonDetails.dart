@@ -15,6 +15,7 @@ class PersonDetails extends StatelessWidget {
     var provider = Provider.of<Justicedz>(context);
 
     var person = provider.getPersonById(personId);
+    var isFavorite = provider.favorites.contains(person);
 
     var _appBar = AppBar(
       title: Text("Justice DZ"),
@@ -22,9 +23,9 @@ class PersonDetails extends StatelessWidget {
       elevation: 3,
       actions: <Widget>[
         IconButton(
-          icon: Icon(Icons.favorite_border), 
-          onPressed: (){
-            print("TODO");
+          icon: Icon(isFavorite? Icons.favorite : Icons.favorite_border), 
+          onPressed: () async{
+            await provider.addToFavs(personId);
           }
         )
       ],

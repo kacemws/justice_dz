@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:justice_dz/models/Justicedz.dart';
 import 'package:justice_dz/presentation/screens/LandingPage.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
+import 'package:justice_dz/presentation/screens/Settings.dart';
+import 'package:justice_dz/presentation/screens/SplashScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/screens/PersonDetails.dart';
@@ -64,9 +66,10 @@ class MyApp extends StatelessWidget {
         ),
 
         routes: {
-          '/' : (context)=> LandingPage(),
+          '/' : (context)=> SplashScreen(),
           MainHomePage.route : (context) => MainHomePage(),
           PersonDetails.route : (context)=> PersonDetails(),
+          Settings.route : (context)=> Settings()
         },
       ),
 

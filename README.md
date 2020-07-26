@@ -16,7 +16,7 @@ Justice dz is an app that lets you find lawyers depending on a state. Its made w
 :white_check_mark: add handler to send email. <br/>
 :white_check_mark: add handler to redirect user to google maps. <br/>
 :white_check_mark: add handler to call laywer. <br/>
-:black_square_button: add handler to add laywer to favs. <br/>
-:black_square_button: add favs screen. <br/>
+:white_check_mark: add handler to add laywer to favs. <br/>
+:white_check_mark: add favs screen. <br/>
 :black_square_button: add handle to change language <br/>
 
