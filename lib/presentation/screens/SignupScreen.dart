@@ -108,7 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Column(
                   children: <Widget>[
 
-                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey,),
+                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey,text: "Demande d'inscription",),
 
                     Stack(
 

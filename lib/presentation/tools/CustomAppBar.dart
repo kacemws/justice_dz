@@ -5,11 +5,13 @@ class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     @required double width,
     @required double height,
+    @required this.text,
     @required this.scaffoldKey
   }) : _width = width, _height = height;
 
   final double _width;
   final double _height;
+  final String text;
   final GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
@@ -27,6 +29,7 @@ class CustomAppBar extends StatelessWidget {
           Container(
             width: _width *0.25,
             height: _height *0.1,
+            alignment: Alignment.centerLeft,
             child: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white), 
               onPressed: (){
@@ -39,7 +42,7 @@ class CustomAppBar extends StatelessWidget {
             child: Center(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text("Demande d'inscription", style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),),
+                child: Text(text, style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),),
               ),
             )
           ),

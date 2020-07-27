@@ -7,7 +7,10 @@ import 'package:provider/provider.dart';
 
 
 class CatItem extends StatelessWidget {
-  
+  final Function handler;
+
+  CatItem({@required this.handler});
+
   @override
   Widget build(BuildContext context) {
     var cat = Provider.of<Categorie>(context);
@@ -17,7 +20,7 @@ class CatItem extends StatelessWidget {
 
       builder :(_,constraint)=>GestureDetector(
         onTap: (){
-          //TODO
+          handler(cat);
         },
         child: Container(
           height: constraint.maxHeight,

@@ -29,6 +29,7 @@ class Justicedz with ChangeNotifier{
 
   Wilaya selectedWilaya;
   Categorie selectedCategorie;
+  String keywords = "";
 
   List<Person> peoples = [];
 
@@ -52,10 +53,22 @@ class Justicedz with ChangeNotifier{
 
     List<Person> aux = [];
 
+    if(keywords != ""){
+      peoples.forEach((person){
+        if((person.nom+ " "+ person.prenom).contains(keywords)) aux.add(person);
+      });
+      return aux;
+    }
+
+
     print("doing a check");
+    print(selectedCategorie.id);
+    print(selectedWilaya.id);
+
     if(selectedCategorie == getCategorieById("all") && selectedWilaya == getWilayaById("all")){
       return allPeople();
     }
+
     print("not all selected");
 
     if(selectedCategorie == getCategorieById("all")){

@@ -7,9 +7,11 @@ import 'package:justice_dz/models/data/Categorie.dart';
 import 'package:justice_dz/models/data/Commune.dart';
 import 'package:justice_dz/models/data/Wilaya.dart';
 import 'package:justice_dz/presentation/items/CatItem.dart';
+import 'package:justice_dz/presentation/screens/LocationSelector.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
+import 'package:justice_dz/presentation/tools/Pub.dart';
 import 'package:provider/provider.dart';
 
 import 'package:justice_dz/models/Justicedz.dart';
@@ -24,6 +26,7 @@ class _LandingPageState extends State<LandingPage> {
   Wilaya selectedWilaya;
   Categorie selectedCategorie;
   Commune selectedCommune;
+  String keywords;
   List<Commune> empty = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -39,7 +42,24 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<Justicedz>(context);
     
+    void _saveFields(){
+
+      FocusScope.of(context).unfocus();
+
+      var isValid = _formKey.currentState.validate();
+
+      if(!isValid) return;
+      
+      _formKey.currentState.save();
+      provider.keywords = keywords;
+      Navigator.of(context).pushNamed(
+        MainHomePage.route
+      );
+
+    
+    }
 
     var _appBar = AppBar(
       title: Text("Annuaire"),
@@ -86,8 +106,14 @@ class _LandingPageState extends State<LandingPage> {
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom - _appBar.preferredSize.height;
     var _width = MediaQuery.of(context).size.width;
 
-    var provider = Provider.of<Justicedz>(context);
     List<Categorie> categories = provider.allCategories();
+
+    void chooseCat(Categorie selected){
+      provider.selectedCategorie = selected;
+      Navigator.of(context).pushNamed(
+        WilayaSelector.route
+      );
+    }
 
     return SafeArea(
 
@@ -132,67 +158,70 @@ class _LandingPageState extends State<LandingPage> {
 
                   child : Form(
                     key: _formKey,
-                    child: Column(
+                    child: SingleChildScrollView(
+                      child: Column(
 
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // mainAxisAlignment: MainAxisAlignment.center,
 
-                      children: <Widget>[
-                        space(_height * 0.05),
-                        TextFormField(
-                                  
-                          cursorColor: Theme.of(context).primaryColor,
-
-                          decoration: InputDecoration(
-
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.5),
-
-                            suffixIcon: Icon(
-                              Icons.search
-                            ),
-
-                            hintText: "Rechercher dans l'annuaire",
-
-                            hintStyle: Theme.of(context).textTheme.title.copyWith(
-                              color: Theme.of(context).primaryColor,
-                            ),
+                        children: <Widget>[
+                          space(_height * 0.05),
+                          TextFormField(
                                     
+                            cursorColor: Theme.of(context).primaryColor,
 
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
+                            decoration: InputDecoration(
+
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.5),
+
+                              suffixIcon: Icon(
+                                Icons.search
+                              ),
+
+                              hintText: "Rechercher dans l'annuaire",
+
+                              hintStyle: Theme.of(context).textTheme.title.copyWith(
                                 color: Theme.of(context).primaryColor,
-                                width: 1.5
+                              ),
+                                      
+
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.5
+                                )
                               )
-                            )
+                            ),
+
+                            onFieldSubmitted: (_){
+                              _saveFields();
+                            },
+
+                            validator: (value){
+                              if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
+                              return null;
+                            },
+
+                            onSaved: (value){
+                              keywords = value;
+                              // _userInfos["email"] = value;
+                            },
+
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.search,
                           ),
 
-                          onFieldSubmitted: (_){
-                            // FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
-                          },
+                          title(context, "Exemples : Maitre Hocini, Maitre Saidi, ...", _height, _width),
+                          optionButton(_height, _width),
+                          listOfCats(_height, _width, categories, chooseCat),
+                          // Expanded(child: SizedBox()),
+                          Pub(height : _height, width : _width),
+                          signupButton(_height, _width),
 
-                          validator: (value){
-                            if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-                            return null;
-                          },
-
-                          onSaved: (value){
-                            // _userInfos["email"] = value;
-                          },
-
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.search,
-                        ),
-
-                        title(context, "Exemples : Maitre Hocini, Maitre Saidi, ...", _height, _width),
-                        optionButton(_height, _width),
-                        listOfCats(_height, _width, categories),
-                        // Expanded(child: SizedBox()),
-                        pub(_height,_width),
-                        signupButton(_height, _width),
-
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -295,7 +324,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget listOfCats(double height, double width, List<Categorie> cats){
+  Widget listOfCats(double height, double width, List<Categorie> cats, Function handler){
     return Container(
       height: height *0.225,
       
@@ -323,7 +352,7 @@ class _LandingPageState extends State<LandingPage> {
 
             child: ChangeNotifierProvider.value(
               value: cats[index],
-              child: CatItem(),
+              child: CatItem(handler : handler),
             ),
 
           );
@@ -333,30 +362,4 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget pub(double height, double width){
-    return Container(
-
-      height: height * 0.25,
-      width : width,
-
-      margin: EdgeInsets.symmetric(
-        // vertical: height *0.01,
-        // horizontal: width * 0.05
-      ),
-
-      
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.75),
-        borderRadius: BorderRadius.circular(15)
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        "Pub", 
-        style: Theme.of(context).textTheme.title.copyWith(
-          color: Colors.white
-        )
-      ),
-
-    );
-  }
 }
