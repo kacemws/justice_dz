@@ -8,6 +8,7 @@ import 'package:justice_dz/models/data/Commune.dart';
 import 'package:justice_dz/models/data/Wilaya.dart';
 import 'package:justice_dz/presentation/items/CatItem.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
+import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
 
@@ -260,29 +261,36 @@ class _LandingPageState extends State<LandingPage> {
   }
 
     Widget signupButton(double _height, double _width){
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).pushNamed(
+          SignupScreen.route
+        );
+      },
+      child: Container(
 
-      height: _height * 0.075,
-      width: _width * 0.8,
+        height: _height * 0.075,
+        width: _width * 0.8,
 
-      margin: EdgeInsets.symmetric(
-        horizontal: _width *0.05,
-        vertical: _height *0.02,
-      ),
+        margin: EdgeInsets.symmetric(
+          horizontal: _width *0.05,
+          vertical: _height *0.02,
+        ),
 
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      alignment: Alignment.center,
-      child: FittedBox(
-        fit: BoxFit.scaleDown, 
-        child: Text( 
-          "Practicien? Inscrivez-vous! ", 
-          style: Theme.of(context).textTheme.title.copyWith(
-            color: Theme.of(context).primaryColor
-          ),
-        )
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: FittedBox(
+          fit: BoxFit.scaleDown, 
+          child: Text( 
+            "Practicien? Inscrivez-vous! ", 
+            style: Theme.of(context).textTheme.title.copyWith(
+              color: Theme.of(context).primaryColor
+            ),
+          )
+        ),
       ),
     );
   }
