@@ -24,6 +24,8 @@ class _LandingPageState extends State<LandingPage> {
   Categorie selectedCategorie;
   Commune selectedCommune;
   List<Commune> empty = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
 
   void confirmer(){
     Provider.of<Justicedz>(context, listen: false).selectedCategorie = selectedCategorie;
@@ -36,29 +38,46 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+    
 
     var _appBar = AppBar(
       title: Text("Annuaire"),
 
-      leading: IconButton(
-        icon : Icon(Icons.menu),
-        onPressed: (){
+      leading: GestureDetector(
+        onTap: (){
           _scaffoldKey.currentState.openDrawer();
         },
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+
+              Icon(
+                Icons.menu,
+                // size: 20,
+              ), 
+              Text("Menu",style: TextStyle(fontSize: 12 ),)
+
+            ],
+          ),
       ),
 
       centerTitle: true,
       elevation: 3,
       actions: <Widget>[
         
-        IconButton(
-          icon: Icon(
-            Icons.pin_drop,
-          ), 
-          onPressed: (){
-            print("TODO");
-          }
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+
+            Icon(
+              Icons.pin_drop,
+              // size: 20,
+            ), 
+            Text("Plan",style: TextStyle(fontSize: 12 ),)
+
+          ],
         ),
       ],
     );
@@ -94,8 +113,8 @@ class _LandingPageState extends State<LandingPage> {
                   children: <Widget>[
 
                     Image.asset(
-                      "assets/justice.png",
-                      height: _height,
+                      "assets/justice-b.jpg",
+                      height: _height * 1,
                       width: _width,
                       fit: BoxFit.cover,
                     ), 
@@ -103,107 +122,90 @@ class _LandingPageState extends State<LandingPage> {
                   ],
                 ),
 
-                Column(
+                Container(
 
-                  children: <Widget>[
+                  width: _width,
+                  height: _height,
 
-                    Container(
+                  margin: EdgeInsets.symmetric(horizontal: _width * 0.05),
 
-                      width: _width,
-                      height: _height *0.4,
+                  child : Form(
+                    key: _formKey,
+                    child: Column(
 
-                      margin: EdgeInsets.symmetric(horizontal: _width * 0.05),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
 
-                      child : Form(
-
-                        child: Column(
-
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: <Widget>[
-
-                            TextFormField(
+                      children: <Widget>[
+                        space(_height * 0.05),
+                        TextFormField(
                                   
-                              cursorColor: Theme.of(context).primaryColor,
+                          cursorColor: Theme.of(context).primaryColor,
 
-                              decoration: InputDecoration(
+                          decoration: InputDecoration(
 
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.5),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.5),
 
-                                suffixIcon: Icon(
-                                  Icons.search
-                                ),
-
-                                hintText: "Rechercher dans l'annuaire",
-
-                                hintStyle: Theme.of(context).textTheme.title.copyWith(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                    
-
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 1.5
-                                  )
-                                )
-                              ),
-
-                              onFieldSubmitted: (_){
-                                // FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
-                              },
-
-                              validator: (value){
-                                if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-                                return null;
-                              },
-
-                              // onSaved: (value){
-                              //   _userInfos["email"] = value;
-                              // },
-
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.search,
+                            suffixIcon: Icon(
+                              Icons.search
                             ),
 
-                            title(context, "Exemples : Maitre Hocini, Maitre Saidi, ...", _height, _width),
-                            optionButton(_height, _width)
+                            hintText: "Rechercher dans l'annuaire",
 
-                          ],
+                            hintStyle: Theme.of(context).textTheme.title.copyWith(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                                    
+
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                                width: 1.5
+                              )
+                            )
+                          ),
+
+                          onFieldSubmitted: (_){
+                            // FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
+                          },
+
+                          validator: (value){
+                            if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
+                            return null;
+                          },
+
+                          onSaved: (value){
+                            // _userInfos["email"] = value;
+                          },
+
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.search,
                         ),
-                      ),
-                          
+
+                        title(context, "Exemples : Maitre Hocini, Maitre Saidi, ...", _height, _width),
+                        optionButton(_height, _width),
+                        listOfCats(_height, _width, categories),
+                        // Expanded(child: SizedBox()),
+                        pub(_height,_width),
+                        signupButton(_height, _width),
+
+                      ],
                     ),
-
-                    Container(
-                      width: _width,
-                      height: _height *0.6,
-
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            listOfCats(_height, _width, categories),
-                            Expanded(child: SizedBox()),
-                            pub(_height,_width)
-                          ],
-                        ),
-                      ),
-
-                    ),
-
-
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
-        ),
+        )
+      )
+    );
+  }
 
-      ),
+  Widget space(double height){
+    return SizedBox(
+      height: height,
     );
   }
 
@@ -229,7 +231,8 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
-    Widget optionButton(double _height, double _width){
+
+  Widget optionButton(double _height, double _width){
     return Container(
 
       height: _height * 0.075,
@@ -250,6 +253,34 @@ class _LandingPageState extends State<LandingPage> {
           "Rechercher par catégorie", 
           style: Theme.of(context).textTheme.title.copyWith(
             color: Colors.white
+          ),
+        )
+      ),
+    );
+  }
+
+    Widget signupButton(double _height, double _width){
+    return Container(
+
+      height: _height * 0.075,
+      width: _width * 0.8,
+
+      margin: EdgeInsets.symmetric(
+        horizontal: _width *0.05,
+        vertical: _height *0.02,
+      ),
+
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      alignment: Alignment.center,
+      child: FittedBox(
+        fit: BoxFit.scaleDown, 
+        child: Text( 
+          "Practicien? Inscrivez-vous! ", 
+          style: Theme.of(context).textTheme.title.copyWith(
+            color: Theme.of(context).primaryColor
           ),
         )
       ),
@@ -279,7 +310,7 @@ class _LandingPageState extends State<LandingPage> {
             margin: EdgeInsets.only(
               top: height *0.01,
               bottom: height *0.01,
-              left: width *0.05
+              right: width *0.025
             ),
 
             child: ChangeNotifierProvider.value(
@@ -297,12 +328,12 @@ class _LandingPageState extends State<LandingPage> {
   Widget pub(double height, double width){
     return Container(
 
-      height: height * 0.2,
+      height: height * 0.25,
       width : width,
 
       margin: EdgeInsets.symmetric(
-        vertical: height *0.01,
-        horizontal: width * 0.05
+        // vertical: height *0.01,
+        // horizontal: width * 0.05
       ),
 
       
