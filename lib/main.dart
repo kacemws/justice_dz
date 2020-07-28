@@ -15,7 +15,7 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
 
-  Map<int, Color> color =
+  final Map<int, Color> color =
   {
     50:Color.fromRGBO(24, 134, 135, 0.1),
     100:Color.fromRGBO(24, 134, 135, 0.2),

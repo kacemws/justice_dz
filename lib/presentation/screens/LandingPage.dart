@@ -181,7 +181,7 @@ class _LandingPageState extends State<LandingPage> {
 
                               hintText: "Rechercher dans l'annuaire",
 
-                              hintStyle: Theme.of(context).textTheme.title.copyWith(
+                              hintStyle: Theme.of(context).textTheme.headline6.copyWith(
                                 color: Theme.of(context).primaryColor,
                               ),
                                       
@@ -253,7 +253,7 @@ class _LandingPageState extends State<LandingPage> {
         fit: BoxFit.scaleDown,
         child: Text(
           text,
-          style: Theme.of(context).textTheme.title.copyWith(
+          style: Theme.of(context).textTheme.headline6.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold
           ),
@@ -281,7 +281,7 @@ class _LandingPageState extends State<LandingPage> {
         fit: BoxFit.scaleDown, 
         child: Text( 
           "Rechercher par catégorie", 
-          style: Theme.of(context).textTheme.title.copyWith(
+          style: Theme.of(context).textTheme.headline6.copyWith(
             color: Colors.white
           ),
         )
@@ -315,7 +315,7 @@ class _LandingPageState extends State<LandingPage> {
           fit: BoxFit.scaleDown, 
           child: Text( 
             "Practicien? Inscrivez-vous! ", 
-            style: Theme.of(context).textTheme.title.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
               color: Theme.of(context).primaryColor
             ),
           )

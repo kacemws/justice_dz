@@ -27,7 +27,7 @@ class Pub extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         "Pub", 
-        style: Theme.of(context).textTheme.title.copyWith(
+        style: Theme.of(context).textTheme.headline6.copyWith(
           color: Colors.white
         )
       ),

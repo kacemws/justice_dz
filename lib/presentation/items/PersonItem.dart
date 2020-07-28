@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PersonItem extends StatelessWidget {
 
-  Map<int, Color> color =
+  final Map<int, Color> color =
   {
     50:Color.fromRGBO(12, 92, 76, 0.1),
     100:Color.fromRGBO(12, 92, 76, 0.2),
@@ -84,7 +84,7 @@ class PersonItem extends StatelessWidget {
                     )
                   ),
 
-                  Text("Docteur " + person.prenom + " " + person.nom,style: Theme.of(context).textTheme.title.copyWith(
+                  Text("Docteur " + person.prenom + " " + person.nom,style: Theme.of(context).textTheme.headline6.copyWith(
                     color: Colors.white
                   ),),
 

@@ -125,7 +125,7 @@ class Justicedz with ChangeNotifier{
 
     await this.fetchPeople();
     print("got people");
-    await this.fetchFavs();
+    this.fetchFavs();
     loaded = true;
     print("done");
 
@@ -239,7 +239,7 @@ class Justicedz with ChangeNotifier{
     });
   }
 
-  Future<void> fetchFavs(){
+  void fetchFavs(){
     var favs = prefs.getStringList("favorites") ?? [];
     favorites.clear();
     favs.forEach((fav){

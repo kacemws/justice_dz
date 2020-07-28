@@ -26,9 +26,9 @@ class _SignupScreenState extends State<SignupScreen> {
     "details" : ""
   };
 
-  Categorie selectedCat = null;
-  Wilaya selectedWilaya = null;
-  Commune selectedCom = null;
+  Categorie selectedCat;
+  Wilaya selectedWilaya;
+  Commune selectedCom;
 
   setSpecialite(Categorie cat){
     setState(() {
@@ -187,7 +187,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
           hintText: hintText,
 
-          hintStyle: Theme.of(context).textTheme.title.copyWith(
+          hintStyle: Theme.of(context).textTheme.headline6.copyWith(
             // color: Theme.of(context).primaryColor,
           ),
                                     
@@ -226,7 +226,7 @@ class _SignupScreenState extends State<SignupScreen> {
       
       child: DropdownButton<Categorie>(
         
-        hint: Text("Spécialité : ............", style: Theme.of(context).textTheme.title, textAlign: TextAlign.start),
+        hint: Text("Spécialité : ............", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
         value:selected,
 
         onChanged: (value){
@@ -236,7 +236,7 @@ class _SignupScreenState extends State<SignupScreen> {
         items: cats.map((Categorie cat){
           return DropdownMenuItem<Categorie>(
             value: cat,
-            child: Text(cat.nom, style: Theme.of(context).textTheme.title)
+            child: Text(cat.nom, style: Theme.of(context).textTheme.headline6)
           );
         }).toList(),
 
@@ -258,7 +258,7 @@ class _SignupScreenState extends State<SignupScreen> {
       
       child: DropdownButton<Wilaya>(
         
-        hint: Text("Wilaya : ................", style: Theme.of(context).textTheme.title, textAlign: TextAlign.start),
+        hint: Text("Wilaya : ................", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
         value:selected,
 
         onChanged: (value){
@@ -268,7 +268,7 @@ class _SignupScreenState extends State<SignupScreen> {
         items: wilayas.map((Wilaya wilaya){
           return DropdownMenuItem<Wilaya>(
             value: wilaya,
-            child: Text(wilaya.nom, style: Theme.of(context).textTheme.title)
+            child: Text(wilaya.nom, style: Theme.of(context).textTheme.headline6)
           );
         }).toList(),
 
@@ -289,7 +289,7 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
       
       child: DropdownButton<Commune>(
-        hint: Text("Commune : ...............", style: Theme.of(context).textTheme.title, textAlign: TextAlign.start),
+        hint: Text("Commune : ...............", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
         value:selectedCom,
 
         onChanged: (value){
@@ -299,7 +299,7 @@ class _SignupScreenState extends State<SignupScreen> {
         items: selected == null? [] : selected.communes.map((Commune commune){
           return DropdownMenuItem<Commune>(
             value: commune,
-            child: Text(commune.nom, style: Theme.of(context).textTheme.title)
+            child: Text(commune.nom, style: Theme.of(context).textTheme.headline6)
           );
         }).toList(),
 

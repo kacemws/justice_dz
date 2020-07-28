@@ -42,7 +42,7 @@ class CustomAppBar extends StatelessWidget {
             child: Center(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(text, style: Theme.of(context).textTheme.title.copyWith(color: Colors.white),),
+                child: Text(text, style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.white),),
               ),
             )
           ),

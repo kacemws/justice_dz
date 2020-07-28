@@ -152,7 +152,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Commune : ................", style: Theme.of(context).textTheme.title, textAlign: TextAlign.start),
+            Text("Commune : ................", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
             Icon(Icons.search)
           ],
         ),
@@ -165,7 +165,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         items: selected == null? [] : selected.communes.map((Commune commune){
           return DropdownMenuItem<Commune>(
             value: commune,
-            child: Text(commune.nom, style: Theme.of(context).textTheme.title)
+            child: Text(commune.nom, style: Theme.of(context).textTheme.headline6)
           );
         }).toList(),
 
@@ -192,7 +192,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Wilaya : ................", style: Theme.of(context).textTheme.title, textAlign: TextAlign.start),
+            Text("Wilaya : ................", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
             Icon(Icons.search)
           ],
         ),
@@ -206,7 +206,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         items: wilayas.map((Wilaya wilaya){
           return DropdownMenuItem<Wilaya>(
             value: wilaya,
-            child: Text(wilaya.nom, style: Theme.of(context).textTheme.title)
+            child: Text(wilaya.nom, style: Theme.of(context).textTheme.headline6)
           );
         }).toList(),
 
@@ -240,7 +240,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
           fit: BoxFit.scaleDown, 
           child: Text( 
             "Practicien? Inscrivez-vous! ", 
-            style: Theme.of(context).textTheme.title.copyWith(
+            style: Theme.of(context).textTheme.headline6.copyWith(
               color: Colors.white
             ),
           )
@@ -274,7 +274,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
 
           hintText: "Rechercher par nom",
 
-          hintStyle: Theme.of(context).textTheme.title.copyWith(
+          hintStyle: Theme.of(context).textTheme.headline6.copyWith(
             color: Theme.of(context).primaryColor,
           ),
                                         

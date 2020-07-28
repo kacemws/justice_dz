@@ -27,7 +27,7 @@ class Favourites extends StatelessWidget {
 
             space(context), //2.5%
             people.length != 0? listOfPeople(context, constraints, people) : Expanded(child:Center(
-              child: Text("Aucun element trouvé...", style: Theme.of(context).textTheme.subtitle1,),
+              child: Text("Aucun element trouvé...", style: Theme.of(context).textTheme.headline6,),
             ))
            
 
@@ -58,7 +58,7 @@ class Favourites extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: Text(
           text,
-          style: Theme.of(context).textTheme.subtitle1.copyWith(
+          style: Theme.of(context).textTheme.headline6.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.bold
           ),

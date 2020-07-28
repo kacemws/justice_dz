@@ -174,7 +174,7 @@ class PersonDetails extends StatelessWidget {
         fit:BoxFit.scaleDown,
         child: Text(
           text,
-          style: Theme.of(context).textTheme.title.copyWith(
+          style: Theme.of(context).textTheme.headline6.copyWith(
             fontWeight: FontWeight.bold
           ),
         ),
@@ -222,7 +222,7 @@ class PersonDetails extends StatelessWidget {
           ]
         ),
 
-        child: Center(child: Text( "Reserver", style: Theme.of(context).textTheme.title,)),
+        child: Center(child: Text( "Reserver", style: Theme.of(context).textTheme.headline6,)),
 
       ),
     );
