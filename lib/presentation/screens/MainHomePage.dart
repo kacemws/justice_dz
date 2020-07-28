@@ -57,13 +57,36 @@ class _MainHomePageState extends State<MainHomePage> {
         body: Center(
           child: Consumer<Justicedz>(
             builder: (context, provider,_) {
-              if(provider.loaded) return Column(
+              if(provider.loaded) return Stack(
                 children: <Widget>[
-                  CustomAppBar(width: _width, height: _height, text: provider.selectedCategorie != null? provider.selectedCategorie.nom : "Tous", scaffoldKey: _scaffoldKey),
-                  Container(
-                    height: _height *0.8,
-                    width: double.infinity,
-                    child: bodyBuilder()              
+
+                  Column(
+                    children: <Widget>[
+
+                      SizedBox(
+                        width: _width,
+                        height: _height *0.1,
+                      ),
+
+                      Image.asset(
+                        "assets/justice-b.jpg",
+                        height: _height *0.8,
+                        width: _width,
+                        fit: BoxFit.cover,
+                      ),
+
+                    ],
+                  ),
+                  
+                  Column(
+                    children: <Widget>[
+                      CustomAppBar(width: _width, height: _height, text: provider.selectedCategorie != null? provider.selectedCategorie.nom : "Tous", scaffoldKey: _scaffoldKey),
+                      Container(
+                        height: _height *0.8,
+                        width: double.infinity,
+                        child: bodyBuilder()              
+                      ),
+                    ],
                   ),
                 ],
               );
