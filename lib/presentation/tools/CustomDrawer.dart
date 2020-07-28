@@ -46,8 +46,9 @@ class CustomDrawer extends StatelessWidget {
               leading: Icon(Icons.home),
               title: Text("Accueil", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
-                Navigator.of(context).pushReplacementNamed(
-                  '/'
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/',
+                  (Route<dynamic> route) => false
                 );
               },
             ),
@@ -59,8 +60,9 @@ class CustomDrawer extends StatelessWidget {
               title: Text("Paramètres", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
                 print("TODO");
-                Navigator.of(context).pushReplacementNamed(
-                  Settings.route
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  Settings.route,
+                  (Route<dynamic> route) => false
                 );
               },
             ),

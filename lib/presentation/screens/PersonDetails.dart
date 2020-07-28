@@ -1,157 +1,269 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/presentation/tools/CustomAppBar.dart';
+import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PersonDetails extends StatelessWidget {
 
   static final String route = "/person-details";
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-
+    
     var personId = ModalRoute.of(context).settings.arguments as String;
     var provider = Provider.of<Justicedz>(context);
 
     var person = provider.getPersonById(personId);
-    var isFavorite = provider.favorites.contains(person);
 
-    var _appBar = AppBar(
-      title: Text("Justice DZ"),
-      centerTitle: true,
-      elevation: 3,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(isFavorite? Icons.favorite : Icons.favorite_border), 
-          onPressed: () async{
-            await provider.addToFavs(personId);
-          }
-        )
-      ],
-    );
 
-    var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.vertical - _appBar.preferredSize.height;
+    var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.vertical;
     var _width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: _appBar,
+    return SafeArea(
 
-      backgroundColor: Colors.grey[100],
+      top: true,
+      right: true,
+      bottom: true,
+      left: true,
 
-      body: SingleChildScrollView(
-        child: Container(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.grey[50],
+        drawer: CustomDrawer(),
+
+        body: Container(
           height: _height,
           width: _width,
-          child: Column(
 
-            children: <Widget>[
+          child: SingleChildScrollView(
+            child: Stack(
+              children: <Widget>[
 
-              Hero(
-                tag: person.id,
-                child: Image.asset(
-                  "assets/logoJustice.png",
-                  height: _height *0.3,
-                  width: double.infinity,
-                  fit: BoxFit.scaleDown,
+                Column(
+                  children: <Widget>[
+
+                    SizedBox(
+                      width: _width,
+                      height: _height *0.1,
+                    ),
+
+                    Image.asset(
+                      "assets/justice-b.jpg",
+                      height: _height *0.9,
+                      width: _width,
+                      fit: BoxFit.cover,
+                    ),
+
+                  ],
                 ),
-              ),
-              title("Docteur " + person.nom + " " + person.prenom, _height, _width, context, Alignment.center,false),
-              space(_height * 0.05),
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey, text : "Profil"),
+                    space(_height * 0.04),
 
-                  title("Adresse : ", _height, _width, context, Alignment.centerLeft,false),
+                    Container(
 
-                  Container(
-                    // width: _width *0.65,
-                    child: title(person.adresse.adresse, _height, _width, context, Alignment.centerLeft,true)
-                  ),
+                      height: _height *0.325,
+                      width: _width,
+                      
+                      margin: EdgeInsets.symmetric(
+                        horizontal: _width *0.05
+                      ),
 
-                  Expanded(child: SizedBox()),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20)
+                      ),
 
-                  IconButton(
-                    icon: Icon(Icons.explore), 
-                    onPressed: (){
-                      launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
-                    }
-                  ),
+                      child: Center(
+                        child: Image.asset(
+                          "assets/Logo.png"
+                        ),
+                      ),
+                    ),
 
-                ],
-              ),
+                    Container(
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
+                      height: _height *0.5,
+                      width: _width,
+                      
+                      margin: EdgeInsets.symmetric(
+                        horizontal: _width *0.05,
+                        vertical: _height * 0.0125
+                      ),
 
-                  title("N°Telephone : ", _height, _width, context, Alignment.centerLeft,false),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor.withOpacity(0.375),
+                        borderRadius: BorderRadius.circular(20)
+                      ),
 
-                  Container(
-                    // width: _width *0.65,
-                    child: title(person.numPhone, _height, _width, context, Alignment.centerLeft,true)
-                  ),
+                      child: Column(
+                        children: <Widget>[
+                          space(_height * 0.015),
 
-                  Expanded(child: SizedBox()),
+                          Container(
 
-                  IconButton(
-                    icon: Icon(Icons.phone), 
-                    onPressed: (){
-                      launch("tel:"+person.numPhone);
-                    }
-                  ),
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
 
-                ],
-              ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                
+                                title("Maitre : ", _height, _width, context, Alignment.centerLeft,false),
+                                
+                                Container(
+                                  child: title(person.nom + " " + person.prenom, _height, _width, context, Alignment.centerLeft,true)
+                                ),
 
-                  title("E-mail : ", _height, _width, context, Alignment.centerLeft,false),
+                              ],
+                            ),
+                          ),
 
-                  Container(
-                    // width: _width *0.65,
-                    child: title(person.email, _height, _width, context, Alignment.centerLeft,true)
-                  ),
+                          Container(
 
-                  Expanded(child: SizedBox()),
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
 
-                  IconButton(
-                    icon: Icon(Icons.mail), 
-                    onPressed: (){
-                      launch("mailto:"+person.email+"?subject=Reservation&body=");
-                    }
-                  ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
 
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
+                                title("Adresse postale : ", _height, _width, context, Alignment.centerLeft,false),
 
-                  title("Horaire d'ouverture : ", _height, _width, context, Alignment.centerLeft,false),
+                                Container(
+                                  child: title(person.adresse.adresse, _height, _width, context, Alignment.centerLeft,true)
+                                ),
 
-                  Container(
-                    // width: _width *0.65,
-                    child: title(person.horaire, _height, _width, context, Alignment.centerLeft,true)
-                  ),
-                ],
-              ),
+                                Expanded(child: SizedBox()),
 
-              Expanded(child: SizedBox()),
-              followButton(_height, _width, context, person.email),
-              space(_height * 0.025)
+                                IconButton(
+                                  icon: Icon(Icons.explore), 
+                                  onPressed: (){
+                                    launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
+                                  }
+                                ),
 
-            ],
+                              ],
+                            ),
+                          ),
 
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+
+                                title("N°Telephone : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                Container(
+                                  child: title(person.numPhone, _height, _width, context, Alignment.centerLeft,true)
+                                ),
+
+                                Expanded(child: SizedBox()),
+
+                                IconButton(
+                                  icon: Icon(Icons.phone), 
+                                  onPressed: (){
+                                    launch("tel:"+person.numPhone);
+                                  }
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+
+                                title("Horaire d'ouverture : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                Container(
+                                  // width: _width *0.65,
+                                  child: title(person.horaire, _height, _width, context, Alignment.centerLeft,true)
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+
+                                title("Spécialité : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                Container(
+                                  // width: _width *0.65,
+                                  child: title(person.categorie.nom, _height, _width, context, Alignment.centerLeft,true)
+                                ),
+                              ],
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                    ),
+
+                  ],
+                )
+              ],
+            ),
           ),
         ),
+
       ),
     );
 
@@ -160,7 +272,7 @@ class PersonDetails extends StatelessWidget {
   Widget title(String text, double height, double width, BuildContext context, AlignmentGeometry alignment, bool info){
     return Container(
 
-      width: info? width*0.4 : null,
+      width: info? width*0.25 : null,
 
       height: height *0.07,
 
@@ -174,7 +286,7 @@ class PersonDetails extends StatelessWidget {
         fit:BoxFit.scaleDown,
         child: Text(
           text,
-          style: Theme.of(context).textTheme.headline6.copyWith(
+          style: info? Theme.of(context).textTheme.subtitle1 : Theme.of(context).textTheme.headline6.copyWith(
             fontWeight: FontWeight.bold
           ),
         ),
