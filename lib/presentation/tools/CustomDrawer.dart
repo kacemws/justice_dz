@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
+import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 // import 'package:meal_app/Presentation/Screens/Settings.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -30,9 +31,6 @@ class CustomDrawer extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-
-
-
 
             Image.asset(
               "assets/Logo.png",
@@ -69,10 +67,7 @@ class CustomDrawer extends StatelessWidget {
               leading: FaIcon(FontAwesomeIcons.userPlus),
               title: Text("S'inscrire", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/',
-                  (Route<dynamic> route) => false
-                );
+                Navigator.of(context).pushNamed(SignupScreen.route);
               },
             ),
 
@@ -135,7 +130,6 @@ class CustomDrawer extends StatelessWidget {
               leading: FaIcon(FontAwesomeIcons.cog,),
               title: Text("Paramètres", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
-                print("TODO");
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   Settings.route,
                   (Route<dynamic> route) => false
