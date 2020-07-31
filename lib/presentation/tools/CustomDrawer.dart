@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
 // import 'package:meal_app/Presentation/Screens/Settings.dart';
 
@@ -22,6 +23,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     MaterialColor colorCustom = MaterialColor(0xFF188687, color);
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
+    var _width = MediaQuery.of(context).size.width;
     return Drawer(
       elevation: 10,
       child: Container(
@@ -29,21 +31,25 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           children: <Widget>[
 
-            Container(
-              color: colorCustom,
-              width: double.infinity,
-              padding: EdgeInsets.only(bottom: 20, left: 40),
+
+
+
+            Image.asset(
+              "assets/Logo.png",
               height: _height *0.2225,
-              child: Text("Justice Dz",style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Colors.white
-              ),),
-              alignment: Alignment.bottomLeft
+              fit: BoxFit.scaleDown,
             ),
 
-            SizedBox(height: 60,),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(bottom: 20, left: 40),
+              child: Text("Guide Justice",style: Theme.of(context).textTheme.headline4.copyWith(
+                color: Theme.of(context).primaryColor
+              ),),
+            ),
 
             ListTile(
-              leading: Icon(Icons.home),
+              leading: Icon(FontAwesomeIcons.home),
               title: Text("Accueil", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
@@ -53,10 +59,80 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
 
-            SizedBox(height: 20,),
+            Container(
+              height: 1,
+              width: _width *0.75,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
 
             ListTile(
-              leading: Icon(Icons.settings),
+              leading: FaIcon(FontAwesomeIcons.userPlus),
+              title: Text("S'inscrire", style: Theme.of(context).textTheme.headline6,),
+              onTap: (){
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/',
+                  (Route<dynamic> route) => false
+                );
+              },
+            ),
+
+            Container(
+              height: 1,
+              width: _width *0.75,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+      
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.headset),
+              title: Text("Nous Contacter", style: Theme.of(context).textTheme.headline6,),
+              onTap: (){
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/',
+                  (Route<dynamic> route) => false
+                );
+              },
+            ),
+
+            Container(
+              height: 1,
+              width: _width *0.75,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+
+            Expanded(
+              child: SizedBox(),
+            ),
+
+            Container(
+              height: 2,
+              width: _width,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+
+            ListTile(
+              leading: Container(
+                margin: EdgeInsets.only(
+                  left: 7.5
+                ),
+                child: FaIcon(FontAwesomeIcons.info)
+              ),
+              title: Text("A propos", style: Theme.of(context).textTheme.headline6,),
+              onTap: (){
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/',
+                  (Route<dynamic> route) => false
+                );
+              },
+            ),
+
+            Container(
+              height: 1,
+              width: _width *0.75,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.cog,),
               title: Text("Paramètres", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
                 print("TODO");

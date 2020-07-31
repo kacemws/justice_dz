@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:justice_dz/models/Justicedz.dart';
-import 'package:justice_dz/presentation/screens/LandingPage.dart';
 import 'package:justice_dz/presentation/screens/LocationSelector.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';

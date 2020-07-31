@@ -152,14 +152,14 @@ class PersonDetails extends StatelessWidget {
                                   child: title(person.adresse.adresse, _height, _width, context, Alignment.centerLeft,true)
                                 ),
 
-                                Expanded(child: SizedBox()),
+                                // Expanded(child: SizedBox()),
 
-                                IconButton(
-                                  icon: Icon(Icons.explore), 
-                                  onPressed: (){
-                                    launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
-                                  }
-                                ),
+                                // IconButton(
+                                //   icon: Icon(Icons.explore), 
+                                //   onPressed: (){
+                                //     launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
+                                //   }
+                                // ),
 
                               ],
                             ),
@@ -193,6 +193,40 @@ class PersonDetails extends StatelessWidget {
                                   icon: Icon(Icons.phone), 
                                   onPressed: (){
                                     launch("tel:"+person.numPhone);
+                                  }
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+
+                                title("GPS : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                // Container(
+                                //   child: title("", _height, _width, context, Alignment.centerLeft,true)
+                                // ),
+
+                                Expanded(child: SizedBox()),
+
+                                IconButton(
+                                  icon: Icon(Icons.explore), 
+                                  onPressed: (){
+                                    launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
                                   }
                                 ),
 
@@ -274,7 +308,7 @@ class PersonDetails extends StatelessWidget {
 
       width: info? width*0.25 : null,
 
-      height: height *0.07,
+      height: height *0.05,
 
       margin: EdgeInsets.symmetric(
         horizontal: info? 0 : width *0.05,
