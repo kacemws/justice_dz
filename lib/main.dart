@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/LocationSelector.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
@@ -72,7 +73,8 @@ class MyApp extends StatelessWidget {
           SignupScreen.route : (context) => SignupScreen(),
           WilayaSelector.route : (context) => WilayaSelector(),
           PersonDetails.route : (context)=> PersonDetails(),
-          Settings.route : (context)=> Settings()
+          Settings.route : (context)=> Settings(),
+          ContactUs.route : (context)=> ContactUs()
         },
       ),
 

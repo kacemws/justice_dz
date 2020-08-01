@@ -266,6 +266,14 @@ class Justicedz with ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> sendSupport({Map<String,String> infos}) async{
+    await _db.collection("Support").add(infos);
+  }
+
+  Future<void> sendSignup({Map<String,String> infos}) async{
+    await _db.collection("Requests").add(infos);
+  }
+
 
 
 }

@@ -21,14 +21,33 @@ class WilayaSelector extends StatefulWidget {
 class _WilayaSelectorState extends State<WilayaSelector> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
   Wilaya selectedWilaya;
   Commune selectedCommune;
+  String keywords;
+
   @override
   Widget build(BuildContext context) {
 
     var provider = Provider.of<Justicedz>(context);
     var wilayas = provider.allWilayas();
 
+    void _saveFields(){
+
+      FocusScope.of(context).unfocus();
+
+      var isValid = _formKey.currentState.validate();
+
+      if(!isValid) return;
+      
+      _formKey.currentState.save();
+      provider.keywords = keywords;
+      Navigator.of(context).pushNamed(
+        MainHomePage.route
+      );
+
+    
+    }
     
 
     setW(Wilaya newOne){
@@ -101,24 +120,29 @@ class _WilayaSelectorState extends State<WilayaSelector> {
                     Container(
                       height: _height *0.9,
                       width: _width,
-                      child: Column(
-                        children: <Widget>[
+                      child: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
 
-                          SizedBox(
-                            height: _height *0.9 *0.05,
-                            width: _width,
+                              SizedBox(
+                                height: _height *0.9 *0.05,
+                                width: _width,
+                              ),
+
+                              wilayaDropDown(_height, _width,wilayas, selectedWilaya, setW),
+
+                              columnDropDown(_height, _width,selectedWilaya, selectedCommune, setC),
+                              findByName(_height, _width,_saveFields),
+
+                              Pub(height : _height, width : _width),
+
+                              signupButton(_height,_width)
+
+                            ],
                           ),
-
-                          wilayaDropDown(_height, _width,wilayas, selectedWilaya, setW),
-
-                          columnDropDown(_height, _width,selectedWilaya, selectedCommune, setC),
-                          findByName(_height, _width),
-
-                          Pub(height : _height, width : _width),
-
-                          signupButton(_height,_width)
-
-                        ],
+                        ),
                       ),
                     )
 
@@ -249,7 +273,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     );
   }
 
-  Widget findByName(double height, double width){
+  Widget findByName(double height, double width, Function handler){
     return Container(
       height: height *0.9 *0.1,
       width: width,
@@ -289,7 +313,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         ),
 
         onFieldSubmitted: (_){
-          // FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
+          handler();
         },
 
         validator: (value){
@@ -298,7 +322,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         },
 
         onSaved: (value){
-          // _userInfos["email"] = value;
+          keywords = value;
         },
 
         keyboardType: TextInputType.text,

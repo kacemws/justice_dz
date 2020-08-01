@@ -31,14 +31,6 @@ class _LandingPageState extends State<LandingPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  void confirmer(){
-    Provider.of<Justicedz>(context, listen: false).selectedCategorie = selectedCategorie;
-    Provider.of<Justicedz>(context, listen: false).selectedWilaya = selectedWilaya;
-    Navigator.of(context).pushReplacementNamed(
-      MainHomePage.route
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +281,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-    Widget signupButton(double _height, double _width){
+  Widget signupButton(double _height, double _width){
     return GestureDetector(
       onTap: (){
         Navigator.of(context).pushNamed(
