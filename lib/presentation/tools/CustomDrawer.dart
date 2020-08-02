@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
@@ -115,7 +116,7 @@ class CustomDrawer extends StatelessWidget {
               title: Text("A propos", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/',
+                  About.route,
                   (Route<dynamic> route) => false
                 );
               },
