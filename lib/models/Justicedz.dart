@@ -281,8 +281,28 @@ class Justicedz with ChangeNotifier{
     }
   }
 
-  Future<void> sendSignup({Map<String,String> infos}) async{
-    await _db.collection("Requests").add(infos);
+  Future<void> sendSignup({Map<String,String> values}) async{
+    final url = 'https://us-central1-justice-dz.cloudfunctions.net/sendSignup?'+
+    "nom=" + values["nom"]+
+    "&prenom=" + values["prenom"]+
+    "&tel=" + values["tel"]+
+    "&adresse=" + values["adresse"]+
+    "&email=" + values["email"]+
+    "&specialite=" + values["spécialité"]+
+    "&horaire=" + values["horaire"]+
+    "&details=" + values["details"]+
+    "&wilaya=" + values["wilaya"]+
+    "&commune=" + values["commune"]+
+    "&gps=" + values["gps"];
+
+    try{
+      final resp = await http.post(
+        url
+      );
+      print(resp.body);
+    }catch (error){
+      print(error);
+    }
   }
 
 

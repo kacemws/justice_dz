@@ -27,7 +27,6 @@ exports.sendSupport = functions.https.onRequest((req, res) => {
                 <p style="font-size: 16px;">nom  : ${req.query.name}</p>
                 <p style="font-size: 16px;">objet  : ${req.query.object}</p>
                 <p style="font-size: 16px;">message  : ${req.query.message}</p>
-                <img src="https://images.prod.meredith.com/product/fc8754735c8a9b4aebb786278e7265a5/1538025388228/l/rick-and-morty-pickle-rick-sticker" />
             ` // email content in HTML
         };
   
@@ -48,19 +47,21 @@ exports.sendSignup = functions.https.onRequest((req, res) => {
         const dest = req.query.dest;
 
         const mailOptions = {
-            from: 'Your Account Name <yourgmailaccount@gmail.com>', // Something like: Jane Doe <janedoe@gmail.com>
+            from: 'Signup ticket', // Something like: Jane Doe <janedoe@gmail.com>
             to: 'berras.belkacem@gmail.com',
             subject: 'Inscription - Guide Justice', // email subject
             html: `
+                <p style="font-size: 16px;">nom  : ${req.query.nom}</p>
+                <p style="font-size: 16px;">prenom  : ${req.query.prenom}</p>
+                <p style="font-size: 16px;">numero telephone  : ${req.query.tel}</p>
+                <p style="font-size: 16px;">adresse exact  : ${req.query.adresse}</p>
                 <p style="font-size: 16px;">email  : ${req.query.email}</p>
-                <br />
-                <p style="font-size: 16px;">nom  : ${req.query.name}</p>
-                <br />
-                <p style="font-size: 16px;">objet  : ${req.query.object}</p>
-                <br />
-                <p style="font-size: 16px;">message  : ${req.query.message}</p>
-                <br />
-                <img src="https://images.prod.meredith.com/product/fc8754735c8a9b4aebb786278e7265a5/1538025388228/l/rick-and-morty-pickle-rick-sticker" />
+                <p style="font-size: 16px;">spécialité  : ${req.query.specialite}</p>
+                <p style="font-size: 16px;">horaire  : ${req.query.horaire}</p>
+                <p style="font-size: 16px;">details supplémentaire  : ${req.query.details}</p>
+                <p style="font-size: 16px;">wilaya  : ${req.query.wilaya}</p>
+                <p style="font-size: 16px;">commune  : ${req.query.commune}</p>
+                <p style="font-size: 16px;">gps  : ${req.query.gps}</p>
             ` // email content in HTML
         };
   
