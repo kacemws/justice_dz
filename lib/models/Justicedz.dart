@@ -1,9 +1,12 @@
 /*Class that acts as a provider between the bl and the front end, containts all methods and objects.*/
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import './data/Categorie.dart';
 import './data/Person.dart';
@@ -267,7 +270,15 @@ class Justicedz with ChangeNotifier{
   }
 
   Future<void> sendSupport({Map<String,String> infos}) async{
-    await _db.collection("Support").add(infos);
+    final url = 'https://us-central1-justice-dz.cloudfunctions.net/sendSupport?name='+infos["name"]+'&email='+infos["email"]+'&object='+infos["object"]+'&message='+infos["message"];
+    try{
+      final resp = await http.post(
+        url
+      );
+      print(resp.body);
+    }catch (error){
+      print(error);
+    }
   }
 
   Future<void> sendSignup({Map<String,String> infos}) async{
