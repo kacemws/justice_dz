@@ -79,18 +79,24 @@ class _LandingPageState extends State<LandingPage> {
       elevation: 3,
       actions: <Widget>[
         
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
 
-            Icon(
-              Icons.pin_drop,
-              // size: 20,
-            ), 
-            Text("Plan",style: TextStyle(fontSize: 12 ),)
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
 
-          ],
+                Icon(
+                  Icons.pin_drop,
+                  // size: 20,
+                ), 
+                Text("Plan",style: TextStyle(fontSize: 12 ),)
+
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -168,13 +174,14 @@ class _LandingPageState extends State<LandingPage> {
                               fillColor: Colors.white.withOpacity(0.5),
 
                               suffixIcon: Icon(
-                                Icons.search
+                                Icons.search,
+                                color: Colors.black,
                               ),
 
                               hintText: "Rechercher dans l'annuaire",
 
                               hintStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                color: Theme.of(context).primaryColor,
+                                // color: Theme.of(context).primaryColor,
                               ),
                                       
 
@@ -308,7 +315,7 @@ class _LandingPageState extends State<LandingPage> {
           child: Text( 
             "Practicien? Inscrivez-vous! ", 
             style: Theme.of(context).textTheme.headline6.copyWith(
-              color: Theme.of(context).primaryColor
+              // color: Theme.of(context).primaryColor
             ),
           )
         ),

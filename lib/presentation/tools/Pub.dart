@@ -21,16 +21,14 @@ class Pub extends StatelessWidget {
 
       
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.75),
+        // color: Theme.of(context).primaryColor.withOpacity(0.75),
         borderRadius: BorderRadius.circular(15)
       ),
       alignment: Alignment.center,
-      child: Text(
-        "Pub", 
-        style: Theme.of(context).textTheme.headline6.copyWith(
-          color: Colors.white
-        )
-      ),
+      child: Image.asset(
+        'assets/pub.gif',
+        height: height *0.25,
+      )
 
     );
   }

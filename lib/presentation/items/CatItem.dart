@@ -41,10 +41,10 @@ class CatItem extends StatelessWidget {
                 fit: BoxFit.scaleDown,
               ),
               Text(
-                cat.nom,
+                cat.nom.toUpperCase(),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline6.copyWith(
-                  color: Theme.of(context).primaryColor
+                  // color: Theme.of(context).primaryColor
                 ),
               )
             ],

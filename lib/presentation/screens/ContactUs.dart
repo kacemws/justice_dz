@@ -138,8 +138,8 @@ class _ContactUsState extends State<ContactUs> {
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.5),
 
-                              labelStyle: Theme.of(context).textTheme.headline5.copyWith(
-                                color: Theme.of(context).primaryColor,
+                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                // color: Theme.of(context).primaryColor,
                               ),
                               
                               border: UnderlineInputBorder(
@@ -181,8 +181,8 @@ class _ContactUsState extends State<ContactUs> {
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.5),
 
-                              labelStyle: Theme.of(context).textTheme.headline5.copyWith(
-                                color: Theme.of(context).primaryColor,
+                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                // color: Theme.of(context).primaryColor,
                               ),
 
                               border: UnderlineInputBorder(
@@ -224,8 +224,8 @@ class _ContactUsState extends State<ContactUs> {
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.5),
 
-                              labelStyle: Theme.of(context).textTheme.headline5.copyWith(
-                                color: Theme.of(context).primaryColor,
+                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                // color: Theme.of(context).primaryColor,
                               ),
                               
                               border: UnderlineInputBorder(
@@ -270,8 +270,8 @@ class _ContactUsState extends State<ContactUs> {
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.5),
                               labelText: "Votre message",
-                              labelStyle: Theme.of(context).textTheme.headline5.copyWith(
-                                color: Theme.of(context).primaryColor,
+                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                // color: Theme.of(context).primaryColor,
                               ),
                                         
 
@@ -342,7 +342,7 @@ class _ContactUsState extends State<ContactUs> {
           child: Text( 
             text, 
             style: Theme.of(context).textTheme.headline6.copyWith(
-              color: Theme.of(context).primaryColor
+              // color: Theme.of(context).primaryColor
             ),
           )
         ),

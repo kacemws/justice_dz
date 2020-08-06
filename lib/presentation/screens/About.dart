@@ -65,7 +65,7 @@ class About extends StatelessWidget {
                   children: <Widget>[
 
                     Container(
-                      height: _height *0.3,
+                      height: _height *0.6,
                       width: _width,
 
                       margin: EdgeInsets.symmetric(
@@ -79,29 +79,7 @@ class About extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        "Details sur l'appli",
-                        style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: Colors.white
-                        ),
-                      ),
-                    ),
-
-                    Container(
-                      height: _height *0.3,
-                      width: _width,
-
-                      margin: EdgeInsets.symmetric(
-                        horizontal: _width * 0.05,
-                        vertical: _height *0.005
-                      ),
-
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.75),
-                        borderRadius: BorderRadius.circular(7.5)
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Details sur la boite",
+                        "Details",
                         style: Theme.of(context).textTheme.headline5.copyWith(
                           color: Colors.white
                         ),

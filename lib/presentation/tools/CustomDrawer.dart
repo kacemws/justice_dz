@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
+import 'package:justice_dz/presentation/screens/LandingPage.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 // import 'package:meal_app/Presentation/Screens/Settings.dart';
@@ -52,8 +53,8 @@ class CustomDrawer extends StatelessWidget {
               leading: Icon(FontAwesomeIcons.home),
               title: Text("Accueil", style: Theme.of(context).textTheme.headline6,),
               onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/',
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (ctx)=>LandingPage()),
                   (Route<dynamic> route) => false
                 );
               },

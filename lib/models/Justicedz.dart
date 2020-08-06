@@ -1,7 +1,5 @@
 /*Class that acts as a provider between the bl and the front end, containts all methods and objects.*/
 
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,15 +21,22 @@ class Justicedz with ChangeNotifier{
   SharedPreferences prefs ;
 
   List<Wilaya> wilayas = [
-    Wilaya(id: "all", nom: "Tous")
+    Wilaya(id: "all", nom: "Toute l'Algérie")
   ];
 
   List<Categorie> categories = [
-    Categorie(id: "all", nom: "Tous")
+    Categorie(id : "all", nom: "Tous"),
+    Categorie(id : "c1", nom:"Expert"),
+    Categorie(id : "c2", nom: "Avocat"),
+    Categorie(id : "c3", nom:"Notaire"),
+    Categorie(id: "c4", nom: "Huissier de justice"),
+    Categorie(id : "c5", nom:"Municipale"),
   ];
 
   Wilaya selectedWilaya;
   Categorie selectedCategorie;
+  Commune selectedCommune;
+
   String keywords = "";
 
   List<Person> peoples = [];
@@ -77,7 +82,10 @@ class Justicedz with ChangeNotifier{
     if(selectedCategorie == getCategorieById("all")){
 
       peoples.forEach((person){
-        if(person.wilaya == selectedWilaya) aux.add(person);
+        if(person.wilaya == selectedWilaya){
+          if(selectedCommune.nom == "Tous" || person.commune == selectedCommune)
+            aux.add(person);
+        }
       });
       print("all cats selected");
     }else if(selectedWilaya == getWilayaById("all")){
@@ -89,7 +97,10 @@ class Justicedz with ChangeNotifier{
     }else{
 
       peoples.forEach((person){
-        if(person.wilaya == selectedWilaya && person.categorie == selectedCategorie) aux.add(person);
+        if(person.wilaya == selectedWilaya && person.categorie == selectedCategorie){
+          if(selectedCommune.nom == "Tous" || person.commune == selectedCommune)
+            aux.add(person);
+        }
       });
       print("customs selected");
     }
@@ -109,8 +120,11 @@ class Justicedz with ChangeNotifier{
   Categorie getCategorieById(String id){
     return categories.firstWhere((categorie)=>categorie.id == id, orElse:()=> null);
   }
-  
-  
+
+  Commune getCommuneByIdAndWilaya(String wilaya, id){
+    if(getWilayaById(wilaya) == null) return null;
+    return getWilayaById(wilaya).communes.firstWhere((commune)=>commune.id == id, orElse:()=> null);
+  }
 
   Future<void> fetchData() async{
     prefs = await SharedPreferences.getInstance();
@@ -122,9 +136,6 @@ class Justicedz with ChangeNotifier{
 
     await this.fetchCommunes();
     print("got Communes");
-
-    await this.fetchCategories();
-    print("got categories");
 
     await this.fetchPeople();
     print("got people");
@@ -165,6 +176,13 @@ class Justicedz with ChangeNotifier{
 
     wilayas.forEach((wilaya){
       wilaya.communes = [];
+      wilaya.communes.add(
+        Commune(
+          id: wilaya.id+"_all", 
+          nom: "Tous", 
+          wilaya: wilaya
+        )
+      );
     });
 
     snapshot.documents.forEach((document){
@@ -180,31 +198,6 @@ class Justicedz with ChangeNotifier{
       print("got : " + aux.id);
 
       aux.wilaya.communes.add(aux);
-      
-    });
-  }
-
-  Future<void> fetchCategories() async{
-    var snapshot = await _db.collection("Categories").getDocuments();
-    categories.clear();
-
-    categories.add(
-      Categorie(id: "all", nom: "Tous")
-    );
-    print("Categories length : "+categories.length.toString());
-
-    snapshot.documents.forEach((document){
-
-      var data = document.data;
-
-      var aux = Categorie(
-        id: document.documentID, 
-        nom: data["nom"], 
-      );
-
-      print("got : " + aux.id);
-
-      categories.add(aux);
       
     });
   }
@@ -232,6 +225,7 @@ class Justicedz with ChangeNotifier{
         adresse: adresse, 
         horaire: data["horaire"], 
         wilaya: getWilayaById(data["wilaya"]),
+        commune: getCommuneByIdAndWilaya(data["wilaya"],data["commune"]),
         categorie: getCategorieById(data["categorie"])
       );
 

@@ -51,9 +51,12 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     
 
     setW(Wilaya newOne){
+      
       setState(() {
         selectedWilaya = newOne;
+        selectedCommune = null;
       });
+
       if(selectedWilaya.nom == "Tous"){
         provider.selectedWilaya = selectedWilaya;
         provider.keywords = "";
@@ -66,6 +69,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         selectedCommune = newOne;
       });
       provider.selectedWilaya = selectedWilaya;
+      provider.selectedCommune = selectedCommune;
       provider.keywords = "";
       Navigator.of(context).pushNamed(
         MainHomePage.route
@@ -293,13 +297,14 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         decoration: InputDecoration(
 
           suffixIcon: Icon(
-            Icons.search
+            Icons.search,
+            color: Colors.black,
           ),
 
           hintText: "Rechercher par nom",
 
           hintStyle: Theme.of(context).textTheme.headline6.copyWith(
-            color: Theme.of(context).primaryColor,
+            // color: Theme.of(context).primaryColor,
           ),
                                         
 
