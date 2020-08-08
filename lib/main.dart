@@ -6,6 +6,7 @@ import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/LocationSelector.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
+import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 import 'package:justice_dz/presentation/screens/SplashScreen.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
           '/' : (context)=> SplashScreen(),
           MainHomePage.route : (context) => MainHomePage(),
           SignupScreen.route : (context) => SignupScreen(),
+          SignIn.route : (context) => SignIn(),
           WilayaSelector.route : (context) => WilayaSelector(),
           PersonDetails.route : (context)=> PersonDetails(),
           Settings.route : (context)=> Settings(),

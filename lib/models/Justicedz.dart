@@ -286,8 +286,7 @@ class Justicedz with ChangeNotifier{
     "&horaire=" + values["horaire"]+
     "&details=" + values["details"]+
     "&wilaya=" + values["wilaya"]+
-    "&commune=" + values["commune"]+
-    "&gps=" + values["gps"];
+    "&commune=" + values["commune"];
 
     try{
       final resp = await http.post(

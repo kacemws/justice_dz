@@ -43,7 +43,8 @@ class CatItem extends StatelessWidget {
               Text(
                 cat.nom.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline6.copyWith(
+                style: Theme.of(context).textTheme.subtitle2.copyWith(
+                  fontWeight: FontWeight.bold
                   // color: Theme.of(context).primaryColor
                 ),
               )

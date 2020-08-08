@@ -1,9 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
-import 'package:justice_dz/models/data/Categorie.dart';
-import 'package:justice_dz/models/data/Commune.dart';
-import 'package:justice_dz/models/data/Wilaya.dart';
 import 'package:justice_dz/presentation/tools/CustomAppBar.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +39,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final FocusNode details = FocusNode();
   final FocusNode wilaya = FocusNode();
   final FocusNode commune = FocusNode();
-  final FocusNode gps = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
         "\nhoraire : " + values["horaire"]+
         "\ndetails : " + values["details"]+
         "\nwilaya : " + values["wilaya"]+
-        "\ncommune : " + values["commune"]+
-        "\ngps : " + values["gps"]
+        "\ncommune : " + values["commune"]
       );
 
       try{
@@ -164,8 +159,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   container(_height, _width, "Horaire d'ouverture :....", "horaire", horaire,details),
                                   container(_height, _width, "Autres détails : ........", "details", details,wilaya),
                                   container(_height, _width, "Wilaya : .................", "wilaya", wilaya,commune),
-                                  container(_height, _width, "Commune : ................", "commune", commune,gps),
-                                  container(_height, _width, "GPS : ...................", "gps", gps),
+                                  container(_height, _width, "Commune : ................", "commune", commune),
                                 ],
                               ),
                             ),
@@ -225,7 +219,7 @@ class _SignupScreenState extends State<SignupScreen> {
         },
 
         keyboardType: (hintText.contains("N° de téléphone")) ? TextInputType.phone : hintText.contains("Email") ? TextInputType.emailAddress  : TextInputType.text,
-        textInputAction: hintText.contains("GPS")? TextInputAction.done : TextInputAction.next,
+        textInputAction: hintText.contains("Commune")? TextInputAction.done : TextInputAction.next,
       ),
     );
   }

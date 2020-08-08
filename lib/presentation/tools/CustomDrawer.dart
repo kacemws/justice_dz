@@ -5,6 +5,7 @@ import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/LandingPage.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
+import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 // import 'package:meal_app/Presentation/Screens/Settings.dart';
 
@@ -25,7 +26,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MaterialColor colorCustom = MaterialColor(0xFF188687, color);
+
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
     var _width = MediaQuery.of(context).size.width;
     return Drawer(
@@ -51,7 +52,7 @@ class CustomDrawer extends StatelessWidget {
 
             ListTile(
               leading: Icon(FontAwesomeIcons.home),
-              title: Text("Accueil", style: Theme.of(context).textTheme.headline6,),
+              title: Text("Accueil", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
               onTap: (){
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (ctx)=>LandingPage()),
@@ -68,9 +69,26 @@ class CustomDrawer extends StatelessWidget {
 
             ListTile(
               leading: FaIcon(FontAwesomeIcons.userPlus),
-              title: Text("S'inscrire", style: Theme.of(context).textTheme.headline6,),
+              title: Text("S'inscrire", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
               onTap: (){
                 Navigator.of(context).pushNamed(SignupScreen.route);
+              },
+            ),
+
+            Container(
+              height: 1,
+              width: _width *0.75,
+              color: Theme.of(context).primaryColor.withOpacity(0.5),
+            ),
+
+            ListTile(
+              leading: FaIcon(FontAwesomeIcons.userAlt),
+              title: Text("Profil", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              onTap: (){
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  SignIn.route,
+                  (Route<dynamic> route) => false
+                );
               },
             ),
 
@@ -82,7 +100,7 @@ class CustomDrawer extends StatelessWidget {
       
             ListTile(
               leading: FaIcon(FontAwesomeIcons.headset),
-              title: Text("Nous Contacter", style: Theme.of(context).textTheme.headline6,),
+              title: Text("Nous Contacter", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   ContactUs.route,
@@ -114,7 +132,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 child: FaIcon(FontAwesomeIcons.info)
               ),
-              title: Text("A propos", style: Theme.of(context).textTheme.headline6,),
+              title: Text("A propos", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   About.route,
@@ -131,7 +149,7 @@ class CustomDrawer extends StatelessWidget {
 
             ListTile(
               leading: FaIcon(FontAwesomeIcons.cog,),
-              title: Text("Paramètres", style: Theme.of(context).textTheme.headline6,),
+              title: Text("Paramètres", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   Settings.route,
