@@ -1,9 +1,11 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/LandingPage.dart';
+import 'package:justice_dz/presentation/screens/Profile.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
 import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
@@ -84,11 +86,23 @@ class CustomDrawer extends StatelessWidget {
             ListTile(
               leading: FaIcon(FontAwesomeIcons.userAlt),
               title: Text("Profil", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
-              onTap: (){
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  SignIn.route,
-                  (Route<dynamic> route) => false
-                );
+              onTap: () async{
+                var currentUser = await FirebaseAuth.instance.currentUser();
+                if(currentUser == null){
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    SignIn.route,
+                    (Route<dynamic> route) => false
+                  );
+                }else{
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (ctx)=>ProfilePage(
+                        userId: currentUser.uid,
+                      ),
+                    ), 
+                    (Route<dynamic> route) => false
+                  );
+                }
               },
             ),
 

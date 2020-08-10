@@ -298,6 +298,22 @@ class Justicedz with ChangeNotifier{
     }
   }
 
+  Future<void> updateUser(Person updated) async{
+    await _db.collection("People").document(updated.id).updateData({
+      "nom" : updated.nom,
+      "prenom" : updated.prenom,
+      "numPhone" : updated.numPhone,
+      "horaire" : updated.horaire,
+      "adresse" : {
+        "adresse" : updated.adresse.adresse,
+        "lat" : updated.adresse.lat,
+        "long" : updated.adresse.long
+      }
+    });
+    peoples[peoples.indexOf(getPersonById(updated.id))] = updated;
+
+  }
+
 
 
 }

@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/auth.dart';
+import 'package:justice_dz/presentation/screens/Profile.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 
 import 'package:provider/provider.dart';
@@ -74,7 +76,12 @@ class _SignInState extends State<SignIn> {
           _userInfos['email'],
           _userInfos['password'],
         );
-        
+        var currentUser = await FirebaseAuth.instance.currentUser();
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (ctx)=>ProfilePage(
+            userId: currentUser.uid,
+          ))
+        );
 
       } on HttpException catch(error){
         var errorMessage = 'Authentication failed';
