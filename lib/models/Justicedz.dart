@@ -63,7 +63,7 @@ class Justicedz with ChangeNotifier{
 
     if(keywords != ""){
       peoples.forEach((person){
-        if(("maitre " + person.nom+ " "+ person.prenom).contains(keywords)) aux.add(person);
+        if(("maitre " + person.nom.toLowerCase()+ " "+ person.prenom.toLowerCase()).contains(keywords.toLowerCase())) aux.add(person);
       });
       return aux;
     }
