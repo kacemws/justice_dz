@@ -2,17 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
+import 'package:provider/provider.dart';
 
 class About extends StatelessWidget {
   static final route = "/about";
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-
+    var textProvider = Provider.of<Texts>(context);
     var _appBar = AppBar(
       centerTitle: true,
-      title: Text("A propos"),
+      title: Text(textProvider.apropos()),
     );
 
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom - _appBar.preferredSize.height;

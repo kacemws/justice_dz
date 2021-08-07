@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:justice_dz/models/Texts.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget {
 
@@ -16,6 +18,7 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textProvider = Provider.of<Texts>(context);
     return Container(
       width: _width,
       height: _height *0.1,
@@ -66,7 +69,7 @@ class CustomAppBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.menu, color: Colors.white,),
-                      Text("Menu",style: TextStyle(color:Colors.white),)
+                      Text(textProvider.getMenu(),style: TextStyle(color:Colors.white),)
                     ],
                   ),
                 ),
@@ -80,7 +83,7 @@ class CustomAppBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(Icons.place, color: Colors.white,),
-                      Text("Plan",style: TextStyle(color:Colors.white),)
+                      Text(textProvider.getPlan(),style: TextStyle(color:Colors.white),)
                     ],
                   ),
                 ),

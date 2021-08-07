@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/data/Categorie.dart';
 import 'package:justice_dz/models/data/Commune.dart';
 import 'package:justice_dz/models/data/Wilaya.dart';
@@ -35,7 +36,8 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<Justicedz>(context);
-    
+    var textProvider = Provider.of<Texts>(context);
+
     void _saveFields(){
 
       FocusScope.of(context).unfocus();
@@ -54,7 +56,7 @@ class _LandingPageState extends State<LandingPage> {
     }
 
     var _appBar = AppBar(
-      title: Text("Annuaire"),
+      title: Text(textProvider.getTitreAppBarLandingPage()),
 
       leading: GestureDetector(
         onTap: (){
@@ -69,7 +71,7 @@ class _LandingPageState extends State<LandingPage> {
                 Icons.menu,
                 // size: 20,
               ), 
-              Text("Menu",style: TextStyle(fontSize: 12 ),)
+              Text(textProvider.getMenu(),style: TextStyle(fontSize: 12 ),)
 
             ],
           ),
@@ -80,7 +82,7 @@ class _LandingPageState extends State<LandingPage> {
       actions: <Widget>[
         
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: GestureDetector(
 
             child: Column(
@@ -92,7 +94,7 @@ class _LandingPageState extends State<LandingPage> {
                   Icons.pin_drop,
                   // size: 20,
                 ), 
-                Text("Plan",style: TextStyle(fontSize: 12 ),)
+                Text(textProvider.getPlan(),style: TextStyle(fontSize: 12 ),)
 
               ],
             ),
@@ -164,60 +166,61 @@ class _LandingPageState extends State<LandingPage> {
 
                         children: <Widget>[
                           space(_height * 0.05),
-                          TextFormField(
-                                    
-                            cursorColor: Theme.of(context).primaryColor,
-
-                            decoration: InputDecoration(
-
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.5),
-
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Colors.black,
-                              ),
-
-                              hintText: "Rechercher dans l'annuaire",
-
-                              hintStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                // color: Theme.of(context).primaryColor,
-                              ),
+                          Directionality(
+                            textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                            child: TextFormField(
                                       
+                              cursorColor: Theme.of(context).primaryColor,
 
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 1.5
+                              decoration: InputDecoration(
+
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.5),
+
+                                suffixIcon:Icon(
+                                  Icons.search,
+                                  color: Colors.black,
+                                ),
+                                hintText: textProvider.getRechDansLann(),
+
+                                hintStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                  // color: Theme.of(context).primaryColor,
+                                ),
+
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1.5
+                                  )
                                 )
-                              )
+                              ),
+
+                              onFieldSubmitted: (_){
+                                _saveFields();
+                              },
+
+                              validator: (value){
+                                if(value.isEmpty) return textProvider.isFrench? "Veuillez Introduire Un Nom Valide" : "رجاء ادخل اسما صحيحا";
+                                return null;
+                              },
+
+                              onSaved: (value){
+                                keywords = value;
+                                // _userInfos["email"] = value;
+                              },
+
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.search,
                             ),
-
-                            onFieldSubmitted: (_){
-                              _saveFields();
-                            },
-
-                            validator: (value){
-                              if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-                              return null;
-                            },
-
-                            onSaved: (value){
-                              keywords = value;
-                              // _userInfos["email"] = value;
-                            },
-
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.search,
                           ),
 
-                          title(context, "Exemples : Maitre Hocini, Maitre Saidi, ...", _height, _width),
-                          optionButton(_height, _width),
+                          title(context, textProvider.getLandingExemple(), _height, _width),
+                          optionButton(_height, _width,textProvider.getRechParCat()),
                           listOfCats(_height, _width, categories, chooseCat),
                           // Expanded(child: SizedBox()),
                           Pub(height : _height, width : _width),
-                          signupButton(_height, _width),
+                          signupButton(_height, _width,textProvider.inscrivezvous()),
 
                         ],
                       ),
@@ -261,7 +264,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget optionButton(double _height, double _width){
+  Widget optionButton(double _height, double _width,String text){
     return Container(
 
       height: _height * 0.075,
@@ -279,7 +282,7 @@ class _LandingPageState extends State<LandingPage> {
       child: FittedBox(
         fit: BoxFit.scaleDown, 
         child: Text( 
-          "Rechercher par catégorie", 
+          text, 
           style: Theme.of(context).textTheme.headline6.copyWith(
             color: Colors.white
           ),
@@ -288,7 +291,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget signupButton(double _height, double _width){
+  Widget signupButton(double _height, double _width,String text){
     return GestureDetector(
       onTap: (){
         Navigator.of(context).pushNamed(
@@ -313,7 +316,7 @@ class _LandingPageState extends State<LandingPage> {
         child: FittedBox(
           fit: BoxFit.scaleDown, 
           child: Text( 
-            "Practicien? Inscrivez-vous! ", 
+            text, 
             style: Theme.of(context).textTheme.headline6.copyWith(
               // color: Theme.of(context).primaryColor
             ),

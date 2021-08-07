@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/data/Person.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     
     var provider = Provider.of<Justicedz>(context, listen: false);
+    var textProvider = Provider.of<Texts>(context);
     var people = provider.customList();
 
     return LayoutBuilder(
@@ -26,8 +28,8 @@ class HomePage extends StatelessWidget {
 
         child: Column(      
           children: people.length != 0? [
-            title(context,people.length.toString()+" résultats correspendent à votre recherche", constraints),//12.5%
-            listOfPeople(context, constraints, people)
+            title(context,textProvider.resultats(people.length), constraints),//12.5%
+            listOfPeople(context, constraints, people, textProvider)
           ] : [
             Expanded(child:Center(
                 child: Text("Aucun element trouvé...", style: Theme.of(context).textTheme.headline6,),
@@ -68,7 +70,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget listOfPeople(BuildContext context, BoxConstraints constraints, List<Person> people){
+  Widget listOfPeople(BuildContext context, BoxConstraints constraints, List<Person> people, Texts provider){
 
     return Container(
 
@@ -111,9 +113,13 @@ class HomePage extends StatelessWidget {
             leading: Image.asset("assets/logoJustice.png", fit: BoxFit.scaleDown,),
             title: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text("Maitre "+people[index].nom+" "+people[index].prenom, style: Theme.of(context).textTheme.headline6.copyWith(
-                color: Colors.white
-              ),),
+              child: Text(
+                provider.nomPrenom(people[index].nom, people[index].prenom, people[index].nomAr, people[index].prenomAr), 
+                style: Theme.of(context).textTheme.headline6.copyWith(
+                  color: Colors.white
+                ),
+                textAlign: provider.isFrench? TextAlign.left : TextAlign.right,
+              ),
             ),
             onTap: (){
               Navigator.of(context).pushNamed(

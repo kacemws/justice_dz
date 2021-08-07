@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/tools/BottomNavigation.dart';
 import 'package:justice_dz/presentation/tools/CustomAppBar.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
@@ -43,6 +44,7 @@ class _MainHomePageState extends State<MainHomePage> {
   Widget build(BuildContext context) {
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
     var _width = MediaQuery.of(context).size.width;
+    var textProvider = Provider.of<Texts>(context);
 
     return SafeArea(
 
@@ -80,7 +82,7 @@ class _MainHomePageState extends State<MainHomePage> {
                   
                   Column(
                     children: <Widget>[
-                      CustomAppBar(width: _width, height: _height, text: provider.selectedCategorie != null? provider.selectedCategorie.nom : "Tous", scaffoldKey: _scaffoldKey),
+                      CustomAppBar(width: _width, height: _height, text: provider.selectedCategorie != null? (textProvider.isFrench? provider.selectedCategorie.nom : provider.selectedCategorie.nomAr) : (textProvider.isFrench? "Tous" : "الكل"), scaffoldKey: _scaffoldKey),
                       Container(
                         height: _height *0.8,
                         width: double.infinity,

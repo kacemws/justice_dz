@@ -15,7 +15,9 @@ class Adresse{
 class Person with ChangeNotifier{
   final String id;
   final String nom;
+  final String nomAr;
   final String prenom;
+  final String prenomAr;
   final Adresse adresse;
   final String numPhone;
   final String email;
@@ -24,5 +26,5 @@ class Person with ChangeNotifier{
   final Wilaya wilaya;
   final Commune commune;
   final Categorie categorie;
-  Person({@required this.id, @required this.nom, @required this.prenom, @required this.email, @required this.numPhone, @required this.adresse, @required this.horaire, @required this.wilaya, @required this.categorie, @required this.commune});
+  Person({@required this.id, @required this.nom, @required this.nomAr, @required this.prenom, @required this.prenomAr, @required this.email, @required this.numPhone, @required this.adresse, @required this.horaire, @required this.wilaya, @required this.categorie, @required this.commune});
 }

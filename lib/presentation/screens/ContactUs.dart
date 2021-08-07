@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
 
@@ -34,6 +35,7 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
 
     var provider = Provider.of<Justicedz>(context);
+    var textProvider = Provider.of<Texts>(context);
     
     Future<void> _saveFields() async{
 
@@ -70,7 +72,7 @@ class _ContactUsState extends State<ContactUs> {
 
 
     var _appBar = AppBar(
-      title: Text("Contactez-nous"),
+      title: Text(textProvider.isFrench? "Contactez-nous" : "اتصل بنا"),
       centerTitle: true,
     );
 
@@ -130,179 +132,190 @@ class _ContactUsState extends State<ContactUs> {
                           ),
 
 
-                          TextFormField(
-                            cursorColor: Theme.of(context).primaryColor,
+                          Directionality(
+                            textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                            child: TextFormField(
+                              cursorColor: Theme.of(context).primaryColor,
+                              decoration: InputDecoration(
+                                labelText: textProvider.votreNom(),
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.5),
 
-                            decoration: InputDecoration(
-                              labelText: "Votre nom *",
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.5),
-
-                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                // color: Theme.of(context).primaryColor,
-                              ),
-                              
-                              border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2
+                                labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                  // color: Theme.of(context).primaryColor,
+                                ),
+                                
+                                border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2
+                                  )
                                 )
-                              )
+                              ),
+
+                              onFieldSubmitted: (_){
+                                FocusScope.of(context).requestFocus(emailNode);
+                              },
+
+                              validator: (value){
+                                if(value.isEmpty) return textProvider.isFrench? "Veuillez Introduire Un Nom Valide" : "الرجاء إدخال قيمة صالحة";
+                                return null;
+                              },
+
+                              onSaved: (value){
+                                userInfos["name"] = value;
+                              },
+
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              
                             ),
-
-                            onFieldSubmitted: (_){
-                              FocusScope.of(context).requestFocus(emailNode);
-                            },
-
-                            validator: (value){
-                              if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-                              return null;
-                            },
-
-                            onSaved: (value){
-                              userInfos["name"] = value;
-                            },
-
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            
                           ),
 
                           SizedBox(
                             height: _height *0.025,
                           ),
 
-                          TextFormField(
-                            cursorColor: Theme.of(context).primaryColor,
-                            focusNode: emailNode,
-                            decoration: InputDecoration(
-                              labelText: "Votre adresse de messagerie *",
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.5),
+                          Directionality(
+                            textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                            child: TextFormField(
+                              cursorColor: Theme.of(context).primaryColor,
+                              focusNode: emailNode,
+                              decoration: InputDecoration(
+                                labelText: textProvider.votreEmail(),
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.5),
 
-                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                // color: Theme.of(context).primaryColor,
+                                labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                  // color: Theme.of(context).primaryColor,
+                                ),
+
+                                border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2
+                                  )
+                                )
                               ),
 
-                              border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2
-                                )
-                              )
+                              onFieldSubmitted: (_){
+                                FocusScope.of(context).requestFocus(objetNode);
+                              },
+
+                              validator: (value){
+                                if(value.isEmpty || !(value.contains("@"))) return textProvider.errEmail();
+                                return null;
+                              },
+
+                              onSaved: (value){
+                                userInfos["email"] = value;
+                              },
+
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              
                             ),
-
-                            onFieldSubmitted: (_){
-                              FocusScope.of(context).requestFocus(objetNode);
-                            },
-
-                            validator: (value){
-                              if(value.isEmpty || !(value.contains("@"))) return "Veuillez Introduire Un Email Valide";
-                              return null;
-                            },
-
-                            onSaved: (value){
-                              userInfos["email"] = value;
-                            },
-
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            
                           ),
 
                           SizedBox(
                             height: _height *0.025,
                           ),
 
-                          TextFormField(
-                            cursorColor: Theme.of(context).primaryColor,
-                            focusNode: objetNode,
-                            decoration: InputDecoration(
-                              labelText: "Objet",
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.5),
+                          Directionality(
+                            textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                            child: TextFormField(
+                              cursorColor: Theme.of(context).primaryColor,
+                              focusNode: objetNode,
+                              decoration: InputDecoration(
+                                labelText: textProvider.objet(),
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.5),
 
-                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                // color: Theme.of(context).primaryColor,
-                              ),
-                              
-                              border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2
+                                labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                  // color: Theme.of(context).primaryColor,
+                                ),
+                                
+                                border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2
+                                  )
                                 )
-                              )
+                              ),
+
+                              onFieldSubmitted: (_){
+                                FocusScope.of(context).requestFocus(messageNode);
+                              },
+
+                              validator: (value){
+                                // if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
+                                return null;
+                              },
+
+                              onSaved: (value){
+                                userInfos["object"] = value;
+                              },
+
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              
                             ),
-
-                            onFieldSubmitted: (_){
-                              FocusScope.of(context).requestFocus(messageNode);
-                            },
-
-                            validator: (value){
-                              // if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-                              return null;
-                            },
-
-                            onSaved: (value){
-                              userInfos["object"] = value;
-                            },
-
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            
                           ),
                           
                           SizedBox(
                             height: _height *0.025,
                           ),
 
-                          TextFormField(
-                            maxLines: null,
-                            minLines: 8,
-                            focusNode: messageNode,
-                            cursorColor: Theme.of(context).primaryColor,
+                          Directionality(
+                            textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                            child: TextFormField(
+                              maxLines: null,
+                              minLines: 8,
+                              focusNode: messageNode,
+                              cursorColor: Theme.of(context).primaryColor,
 
-                            decoration: InputDecoration(
-                              alignLabelWithHint: true,
-                              filled: true,
-                              fillColor: Colors.white.withOpacity(0.5),
-                              labelText: "Votre message",
-                              labelStyle: Theme.of(context).textTheme.headline6.copyWith(
-                                // color: Theme.of(context).primaryColor,
-                              ),
-                                        
+                              decoration: InputDecoration(
+                                alignLabelWithHint: true,
+                                filled: true,
+                                fillColor: Colors.white.withOpacity(0.5),
+                                labelText: textProvider.message(),
+                                labelStyle: Theme.of(context).textTheme.headline6.copyWith(
+                                  // color: Theme.of(context).primaryColor,
+                                ),
+                                          
 
-                              border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 1.5
+                                border: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 1.5
+                                  )
                                 )
-                              )
+                              ),
+
+                              onFieldSubmitted: (_){
+                                _saveFields();
+                              },
+
+                              validator: (value){
+                                if(value.isEmpty) return textProvider.isFrench? "Veuillez Introduire Un Message Valide": "الرجاء إدخال قيمة صالحة";
+                                return null;
+                              },
+
+                              onSaved: (value){
+                                userInfos["message"] = value;
+                              },
+
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.send,
+
                             ),
-
-                            onFieldSubmitted: (_){
-                              _saveFields();
-                            },
-
-                            validator: (value){
-                              if(value.isEmpty) return "Veuillez Introduire Un Message Valide";
-                              return null;
-                            },
-
-                            onSaved: (value){
-                              userInfos["message"] = value;
-                            },
-
-                            keyboardType: TextInputType.multiline,
-                            textInputAction: TextInputAction.send,
-
                           ),
 
-                          callButton("Envoyer un email",_height, _width, _saveFields),
+                          callButton(textProvider.isFrench? "Envoyer un email" : "إرسال",_height, _width, _saveFields),
 
                         ],
                       ),

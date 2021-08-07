@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/tools/CustomAppBar.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
 
     var provider = Provider.of<Justicedz>(context);
-
+    var textProvider = Provider.of<Texts>(context);
+    
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
     var _width = MediaQuery.of(context).size.width;
 
@@ -119,7 +121,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Column(
                   children: <Widget>[
 
-                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey,text: "Demande d'inscription",),
+                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey,text: textProvider.demandeDins(),),
 
                     Stack(
 
@@ -150,23 +152,23 @@ class _SignupScreenState extends State<SignupScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
 
-                                  container(_height, _width, "Nom : ...................", "nom", null,prenom),
-                                  container(_height, _width, "Prénoms : ...............", "prenom", prenom, tel),
-                                  container(_height, _width, "N° de téléphone : .......", "tel", tel, adresse),
-                                  container(_height, _width, "Adresse exacte : ........", "adresse", adresse, email),
-                                  container(_height, _width, "Email : .................", "email", email,specialite),
-                                  container(_height, _width, "Spécialité : ............", "spécialité", specialite,horaire),
-                                  container(_height, _width, "Horaire d'ouverture :....", "horaire", horaire,details),
-                                  container(_height, _width, "Autres détails : ........", "details", details,wilaya),
-                                  container(_height, _width, "Wilaya : .................", "wilaya", wilaya,commune),
-                                  container(_height, _width, "Commune : ................", "commune", commune),
+                                  container(_height, _width, textProvider.nomHint(), "nom",textProvider.isFrench, null,prenom),
+                                  container(_height, _width, textProvider.prenomHint(), "prenom",textProvider.isFrench, prenom, tel),
+                                  container(_height, _width, textProvider.telHint(), "tel",textProvider.isFrench, tel, adresse),
+                                  container(_height, _width, textProvider.adrHint(), "adresse",textProvider.isFrench, adresse, email),
+                                  container(_height, _width, textProvider.emailHint(), "email",textProvider.isFrench, email,specialite),
+                                  container(_height, _width, textProvider.specHint(), "spécialité",textProvider.isFrench, specialite,horaire),
+                                  container(_height, _width, textProvider.horaireHint(), "horaire",textProvider.isFrench, horaire,details),
+                                  container(_height, _width, textProvider.detailsHint(), "details",textProvider.isFrench, details,wilaya),
+                                  container(_height, _width, textProvider.wilayaHint(), "wilaya",textProvider.isFrench, wilaya,commune),
+                                  container(_height, _width, textProvider.communeHint(), "commune",textProvider.isFrench, commune),
                                 ],
                               ),
                             ),
                           ),
                         ),
 
-                        submitButton(_height, _width,_saveFields)
+                        submitButton(_height, _width,_saveFields,textProvider.envDemande())
                       ],
                     ),
                   ],
@@ -180,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget container(double height, double width, String hintText, String fieldName, [FocusNode currentNode, FocusNode nextNode]){
+  Widget container(double height, double width, String hintText, String fieldName, bool isFrench, [FocusNode currentNode, FocusNode nextNode]){
     return Container(
       // height: (height * 0.85) /13,
       width: width,
@@ -189,42 +191,45 @@ class _SignupScreenState extends State<SignupScreen> {
         horizontal: width * 0.05,
         vertical: (height * 0.85) *0.00075
       ),
-      child: TextFormField(
+      child: Directionality(
+        textDirection: isFrench? TextDirection.ltr : TextDirection.rtl,
+        child: TextFormField(
+          // textAlign: isFrench? TextAlign.left : TextAlign.right,
+          focusNode: currentNode,
 
-        focusNode: currentNode,
+          cursorColor: Theme.of(context).primaryColor,
 
-        cursorColor: Theme.of(context).primaryColor,
+          decoration: InputDecoration(
 
-        decoration: InputDecoration(
+            hintText: hintText,
 
-          hintText: hintText,
-
-          hintStyle: Theme.of(context).textTheme.headline6.copyWith(
-            // color: Theme.of(context).primaryColor,
+            hintStyle: Theme.of(context).textTheme.headline6.copyWith(
+              // color: Theme.of(context).primaryColor,
+            ),
+                                      
           ),
-                                    
+
+          onFieldSubmitted: (_){
+            FocusScope.of(context).requestFocus(nextNode);// move to the other textfield
+          },
+
+          validator: (value){
+            if(value.isEmpty) return isFrench? "Veuillez Introduire Une valeur Valide" : "الرجاء إدخال قيمة صالحة";
+            return null;
+          },
+
+          onSaved: (value){
+            this.values[fieldName] = value;
+          },
+
+          keyboardType: (fieldName.contains("tel")) ? TextInputType.phone : fieldName.contains("email") ? TextInputType.emailAddress  : TextInputType.text,
+          textInputAction: fieldName.contains("commune")? TextInputAction.done : TextInputAction.next,
         ),
-
-        onFieldSubmitted: (_){
-          FocusScope.of(context).requestFocus(nextNode);// move to the other textfield
-        },
-
-        validator: (value){
-          if(value.isEmpty) return "Veuillez Introduire Une valeur Valide";
-          return null;
-        },
-
-        onSaved: (value){
-          this.values[fieldName] = value;
-        },
-
-        keyboardType: (hintText.contains("N° de téléphone")) ? TextInputType.phone : hintText.contains("Email") ? TextInputType.emailAddress  : TextInputType.text,
-        textInputAction: hintText.contains("Commune")? TextInputAction.done : TextInputAction.next,
       ),
     );
   }
 
-  Widget submitButton(double height, double width, Function handler){
+  Widget submitButton(double height, double width, Function handler,String text){
     return GestureDetector(
       onTap: handler,
       child: Container(
@@ -242,7 +247,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
         child: FittedBox(
           fit : BoxFit.scaleDown,
-          child: Text("Envoyer la demande", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+          child: Text(text, style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
         ),
 
       ),

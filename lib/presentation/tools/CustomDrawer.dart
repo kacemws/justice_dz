@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
 import 'package:justice_dz/presentation/screens/LandingPage.dart';
@@ -9,6 +10,7 @@ import 'package:justice_dz/presentation/screens/Profile.dart';
 import 'package:justice_dz/presentation/screens/Settings.dart';
 import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
+import 'package:provider/provider.dart';
 // import 'package:meal_app/Presentation/Screens/Settings.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -31,6 +33,7 @@ class CustomDrawer extends StatelessWidget {
 
     var _height = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
     var _width = MediaQuery.of(context).size.width;
+    var texts = Provider.of<Texts>(context);
     return Drawer(
       elevation: 10,
       child: Container(
@@ -47,20 +50,25 @@ class CustomDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: EdgeInsets.only(bottom: 20, left: 40),
-              child: Text("Guide Justice",style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Theme.of(context).primaryColor
-              ),),
+              child: Text(
+                texts.guideJustice(),
+                style: Theme.of(context).textTheme.headline4.copyWith(
+                  color: Theme.of(context).primaryColor
+                ),
+                textAlign: texts.isFrench? TextAlign.left : TextAlign.center,
+              ),
             ),
 
             ListTile(
-              leading: Icon(FontAwesomeIcons.home),
-              title: Text("Accueil", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              leading: texts.isFrench? Icon(FontAwesomeIcons.home) : SizedBox(),
+              title: Text(texts.accueil(), style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: (){
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (ctx)=>LandingPage()),
                   (Route<dynamic> route) => false
                 );
               },
+              trailing: !texts.isFrench? Icon(FontAwesomeIcons.home) : SizedBox(),
             ),
 
             Container(
@@ -70,11 +78,12 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             ListTile(
-              leading: FaIcon(FontAwesomeIcons.userPlus),
-              title: Text("S'inscrire", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              leading: texts.isFrench? FaIcon(FontAwesomeIcons.userPlus) : SizedBox(),
+              title: Text(texts.sinscrire(), style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: (){
                 Navigator.of(context).pushNamed(SignupScreen.route);
               },
+              trailing: !texts.isFrench? FaIcon(FontAwesomeIcons.userPlus) : SizedBox(),
             ),
 
             Container(
@@ -84,10 +93,10 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             ListTile(
-              leading: FaIcon(FontAwesomeIcons.userAlt),
-              title: Text("Profil", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              leading: texts.isFrench? FaIcon(FontAwesomeIcons.userAlt) : SizedBox(),
+              title: Text(texts.profil(), style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: () async{
-                var currentUser = await FirebaseAuth.instance.currentUser();
+                var currentUser = FirebaseAuth.instance.currentUser;
                 if(currentUser == null){
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     SignIn.route,
@@ -104,6 +113,7 @@ class CustomDrawer extends StatelessWidget {
                   );
                 }
               },
+              trailing : !texts.isFrench? FaIcon(FontAwesomeIcons.userAlt) : SizedBox(),
             ),
 
             Container(
@@ -113,14 +123,15 @@ class CustomDrawer extends StatelessWidget {
             ),
       
             ListTile(
-              leading: FaIcon(FontAwesomeIcons.headset),
-              title: Text("Nous Contacter", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              leading: texts.isFrench? FaIcon(FontAwesomeIcons.headset) : SizedBox(),
+              title: Text(texts.nousContacter() , style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   ContactUs.route,
                   (Route<dynamic> route) => false
                 );
               },
+              trailing: !texts.isFrench? FaIcon(FontAwesomeIcons.headset) : SizedBox(),
             ),
 
             Container(
@@ -140,19 +151,25 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             ListTile(
-              leading: Container(
+              leading: texts.isFrench? Container(
                 margin: EdgeInsets.only(
                   left: 7.5
                 ),
                 child: FaIcon(FontAwesomeIcons.info)
-              ),
-              title: Text("A propos", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              ) : SizedBox(),
+              title: Text(texts.apropos() , style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   About.route,
                   (Route<dynamic> route) => false
                 );
               },
+              trailing: !texts.isFrench? Container(
+                margin: EdgeInsets.only(
+                  right: 7.5
+                ),
+                child: FaIcon(FontAwesomeIcons.info)
+              ) : SizedBox(),
             ),
 
             Container(
@@ -162,14 +179,15 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             ListTile(
-              leading: FaIcon(FontAwesomeIcons.cog,),
-              title: Text("Paramètres", style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),),
+              leading: texts.isFrench? FaIcon(FontAwesomeIcons.cog,) : SizedBox(),
+              title: Text(texts.params(),style: Theme.of(context).textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold),textAlign: texts.isFrench? TextAlign.left : TextAlign.right,),
               onTap: (){
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   Settings.route,
                   (Route<dynamic> route) => false
                 );
               },
+              trailing: !texts.isFrench? FaIcon(FontAwesomeIcons.cog,) : SizedBox(),
             ),
 
           ],

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/data/Commune.dart';
 import 'package:justice_dz/models/data/Wilaya.dart';
 import 'package:justice_dz/presentation/screens/MainHomePage.dart';
@@ -25,11 +26,13 @@ class _WilayaSelectorState extends State<WilayaSelector> {
   Wilaya selectedWilaya;
   Commune selectedCommune;
   String keywords;
+  bool gotError = false;
 
   @override
   Widget build(BuildContext context) {
 
     var provider = Provider.of<Justicedz>(context);
+    var textProvider = Provider.of<Texts>(context);
     var wilayas = provider.allWilayas();
 
     void _saveFields(){
@@ -38,7 +41,15 @@ class _WilayaSelectorState extends State<WilayaSelector> {
 
       var isValid = _formKey.currentState.validate();
 
-      if(!isValid) return;
+      if(!isValid){
+        setState(() {
+          gotError = true;
+        });
+        return;
+      }
+      setState(() {
+        gotError = false;
+      });
       
       _formKey.currentState.save();
       provider.keywords = keywords;
@@ -57,7 +68,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         selectedCommune = null;
       });
 
-      if(selectedWilaya.nom == "Tous"){
+      if(selectedWilaya.id == "all"){
         provider.selectedWilaya = selectedWilaya;
         provider.keywords = "";
         Navigator.of(context).pushNamed(MainHomePage.route);
@@ -120,7 +131,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
                 Column(
                   children: <Widget>[
 
-                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey, text : provider.selectedCategorie.nom),
+                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey, text : textProvider.isFrench? provider.selectedCategorie.nom : provider.selectedCategorie.nomAr),
                     Container(
                       height: _height *0.9,
                       width: _width,
@@ -135,14 +146,14 @@ class _WilayaSelectorState extends State<WilayaSelector> {
                                 width: _width,
                               ),
 
-                              wilayaDropDown(_height, _width,wilayas, selectedWilaya, setW),
+                              wilayaDropDown(_height, _width,wilayas, selectedWilaya, setW, textProvider.wilayaHint(),textProvider.isFrench),
 
-                              columnDropDown(_height, _width,selectedWilaya, selectedCommune, setC),
-                              findByName(_height, _width,_saveFields),
+                              columnDropDown(_height, _width,selectedWilaya, selectedCommune, setC, textProvider.communeHint(),textProvider.isFrench),
+                              findByName(_height, _width,_saveFields,textProvider.getRechDansLann(),textProvider.isFrench,gotError),
 
                               Pub(height : _height, width : _width),
 
-                              signupButton(_height,_width)
+                              signupButton(_height, _width,textProvider.inscrivezvous()),
 
                             ],
                           ),
@@ -161,7 +172,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     );
   }
 
-  Widget columnDropDown(double height, double width, Wilaya selected, Commune selectedC, Function handler) {
+  Widget columnDropDown(double height, double width, Wilaya selected, Commune selectedC, Function handler, String text, bool isFrench) {
     return Container(
       height: height *0.9 *0.15,
       width: width,
@@ -180,8 +191,9 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Commune : ................", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
-            Icon(Icons.search)
+            isFrench? SizedBox() : Icon(Icons.search),
+            Text(text, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
+            !isFrench? SizedBox() : Icon(Icons.search),
           ],
         ),
         value:selectedC,
@@ -193,7 +205,10 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         items: selected == null? [] : selected.communes.map((Commune commune){
           return DropdownMenuItem<Commune>(
             value: commune,
-            child: Text(commune.nom, style: Theme.of(context).textTheme.headline6)
+            child: SizedBox(
+              width: width *0.5,
+              child: Text(isFrench? commune.nom : commune.nomAr,style: Theme.of(context).textTheme.headline6, textAlign: isFrench? TextAlign.left : TextAlign.right,)
+            )
           );
         }).toList(),
 
@@ -201,7 +216,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     );
   }
 
-  Widget wilayaDropDown(double height, double width, List<Wilaya> wilayas, Wilaya selected, Function handler) {
+  Widget wilayaDropDown(double height, double width, List<Wilaya> wilayas, Wilaya selected, Function handler, String text, bool isFrench) {
     return Container(
       height: height *0.9 *0.15,
       width: width,
@@ -220,8 +235,9 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         hint: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("Wilaya : ................", style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
-            Icon(Icons.search)
+            isFrench? SizedBox() : Icon(Icons.search),
+            Text(text, style: Theme.of(context).textTheme.headline6, textAlign: TextAlign.start),
+            !isFrench? SizedBox() : Icon(Icons.search),
           ],
         ),
         value:selected,
@@ -234,7 +250,11 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         items: wilayas.map((Wilaya wilaya){
           return DropdownMenuItem<Wilaya>(
             value: wilaya,
-            child: Text(wilaya.nom, style: Theme.of(context).textTheme.headline6)
+            child :  SizedBox(
+              width: width *0.5,
+              // textDirection: isFrench? TextDirection.ltr : TextDirection.rtl,
+              child: Text(isFrench? wilaya.nom : wilaya.nomAr,style: Theme.of(context).textTheme.headline6, textAlign: isFrench? TextAlign.left : TextAlign.right,)
+            )
           );
         }).toList(),
 
@@ -242,7 +262,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     );
   }
 
-  Widget signupButton(double _height, double _width){
+  Widget signupButton(double _height, double _width, String text){
     return GestureDetector(
       onTap: (){
         Navigator.of(context).pushNamed(
@@ -267,7 +287,7 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         child: FittedBox(
           fit: BoxFit.scaleDown, 
           child: Text( 
-            "Practicien? Inscrivez-vous! ", 
+            text, 
             style: Theme.of(context).textTheme.headline6.copyWith(
               color: Colors.white
             ),
@@ -277,9 +297,9 @@ class _WilayaSelectorState extends State<WilayaSelector> {
     );
   }
 
-  Widget findByName(double height, double width, Function handler){
+  Widget findByName(double height, double width, Function handler, String text, bool isFrench, bool fromError){
     return Container(
-      height: height *0.9 *0.1,
+      height: height *0.9 *(fromError? 0.15 : 0.1),
       width: width,
       margin: EdgeInsets.symmetric(
         horizontal: width * 0.05,
@@ -290,48 +310,52 @@ class _WilayaSelectorState extends State<WilayaSelector> {
         borderRadius: BorderRadius.circular(10)
       ),
 
-      child: TextFormField(
-                                    
-        cursorColor: Theme.of(context).primaryColor,
+      child: Directionality(
+        textDirection: isFrench? TextDirection.ltr : TextDirection.rtl,
+        child: TextFormField(
+                   
+          cursorColor: Theme.of(context).primaryColor,
+          decoration: InputDecoration(
+            // contentPadding: EdgeInsets.all(0),
+            isDense: true,
+            suffixIcon:Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
 
-        decoration: InputDecoration(
+            hintText: text,
 
-          suffixIcon: Icon(
-            Icons.search,
-            color: Colors.black,
+            hintStyle: Theme.of(context).textTheme.headline6.copyWith(
+              // color: Theme.of(context).primaryColor,
+            ),
+                                          
+
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: 1.5
+              )
+            ),
+            // errorBorder: InputBorder.none,
           ),
 
-          hintText: "Rechercher par nom",
+          onFieldSubmitted: (_){
+            handler();
+          },
 
-          hintStyle: Theme.of(context).textTheme.headline6.copyWith(
-            // color: Theme.of(context).primaryColor,
-          ),
-                                        
+          validator: (value){
+            if(value.isEmpty) return isFrench? "Veuillez Introduire Un Nom Valide" : "رجاء ادخل اسما صحيحا";
+            return null;
+          },
 
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              color: Theme.of(context).primaryColor,
-              width: 1.5
-            )
-          )
+          onSaved: (value){
+            keywords = value;
+          },
+
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
         ),
-
-        onFieldSubmitted: (_){
-          handler();
-        },
-
-        validator: (value){
-          if(value.isEmpty) return "Veuillez Introduire Un Nom Valide";
-          return null;
-        },
-
-        onSaved: (value){
-          keywords = value;
-        },
-
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.search,
       ),
     );
   }

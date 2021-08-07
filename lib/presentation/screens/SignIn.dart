@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/auth.dart';
 import 'package:justice_dz/presentation/screens/Profile.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
@@ -40,6 +41,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    var textProvider = Provider.of<Texts>(context);
 
     void _showErrorDialog(String message) {
       showDialog(
@@ -76,7 +78,7 @@ class _SignInState extends State<SignIn> {
           _userInfos['email'],
           _userInfos['password'],
         );
-        var currentUser = await FirebaseAuth.instance.currentUser();
+        var currentUser = FirebaseAuth.instance.currentUser;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (ctx)=>ProfilePage(
             userId: currentUser.uid,
@@ -104,7 +106,7 @@ class _SignInState extends State<SignIn> {
     
     }
     var _appBar = AppBar(
-      title: Text("Profil"),
+      title: Text(textProvider.profil()),
       centerTitle: true,
     );
 
@@ -159,89 +161,97 @@ class _SignInState extends State<SignIn> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
 
-                        TextFormField(
+                        Directionality(
+                          textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                          child: TextFormField(
+                            // textAlign: textProvider.isFrench? TextAlign.left : TextAlign.right,
+                            cursorColor: Theme.of(context).primaryColor,
 
-                          cursorColor: Theme.of(context).primaryColor,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.5),
+                              hintText: textProvider.email(),
+                              hintStyle: Theme.of(context).textTheme.headline6,
 
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.5),
-                            hintText: "Email",
-                            hintStyle: Theme.of(context).textTheme.headline6,
-
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1.5
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.5
+                                )
                               )
-                            )
+                            ),
+
+                            onFieldSubmitted: (_){
+                              FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
+                            },
+
+                            validator: (value){
+                              if(!value.contains("@") || value.isEmpty) return textProvider.errEmail();
+                                return null;
+                            },
+
+                            onSaved: (value){
+                              _userInfos["email"] = value;
+                            },
+
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,                
+                                              
                           ),
-
-                          onFieldSubmitted: (_){
-                            FocusScope.of(context).requestFocus(passwordField); // move to the other textfield
-                          },
-
-                          validator: (value){
-                            if(!value.contains("@") || value.isEmpty) return "Veuillez Introduire Un Email Valide";
-                              return null;
-                          },
-
-                          onSaved: (value){
-                            _userInfos["email"] = value;
-                          },
-
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,                
-                                            
                         ),
 
                         SizedBox(
                           height: _height * 0.015,
                         ),
 
-                        TextFormField(
-                          cursorColor: Theme.of(context).primaryColor,
+                        Directionality(
+                          textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                          child: TextFormField(
+                            // textAlign: textProvider.isFrench? TextAlign.left : TextAlign.right,
+                            cursorColor: Theme.of(context).primaryColor,
+                            
+                            decoration: InputDecoration(
+                              
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.5),
+                              hintText: textProvider.mtp(),
+                              hintStyle: Theme.of(context).textTheme.headline6,
 
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.5),
-                            hintText: "Mot de passe",
-                            hintStyle: Theme.of(context).textTheme.headline6,
+                              suffixIcon: IconButton(
+                                color: Theme.of(context).primaryColor,
+                                icon: Icon(_hidePassword? Icons.visibility_off : Icons.visibility ), 
+                                onPressed: switchToggle
+                              ),
 
-                            suffixIcon: IconButton(
-                              color: Theme.of(context).primaryColor,
-                              icon: Icon(_hidePassword? Icons.visibility_off : Icons.visibility ), 
-                              onPressed: switchToggle
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1.5
+                                )
+                              )
+                                        
                             ),
 
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 1.5
-                              )
-                            )
-                                      
+                            focusNode: passwordField,
+
+                            textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.visiblePassword,
+
+                            obscureText: _hidePassword,
+
+                            validator: (value){
+                              return value.isEmpty? textProvider.errMtp() : null;
+                            },
+
+                            onFieldSubmitted: (_)=>_saveFields(),
+
+                            onSaved: (value){
+                              _userInfos["password"] = value;
+                            },                      
+
                           ),
-
-                          focusNode: passwordField,
-
-                          textInputAction: TextInputAction.done,
-                          keyboardType: TextInputType.visiblePassword,
-
-                          obscureText: _hidePassword,
-
-                          validator: (value){
-                            return value.isEmpty? "Veuillez Introduire Un Mot De Passe" : null;
-                          },
-
-                          onFieldSubmitted: (_)=>_saveFields(),
-
-                          onSaved: (value){
-                            _userInfos["password"] = value;
-                          },                      
-
                         ),
 
                         SizedBox(
@@ -272,7 +282,7 @@ class _SignInState extends State<SignIn> {
                               child: FittedBox(
                                 fit: BoxFit.scaleDown, 
                                 child: Text( 
-                                 "Se connecter", 
+                                 textProvider.seCon(), 
                                   style: Theme.of(context).textTheme.headline6.copyWith(
                                     // color: Theme.of(context).primaryColor
                                   ),
@@ -301,7 +311,7 @@ class _SignInState extends State<SignIn> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Pas Un Membre?",
+                                textProvider.isFrench? textProvider.pum() : textProvider.inscrivezVous(),
                                 style: TextStyle(fontSize: 20,fontWeight: FontWeight.w300),
                               ),
 
@@ -311,7 +321,7 @@ class _SignInState extends State<SignIn> {
                                 ),
 
                                 child:Text(
-                                  " Inscrivez-Vous",
+                                  !textProvider.isFrench? textProvider.pum() : textProvider.inscrivezVous(),
                                   style: TextStyle(fontSize: 20,fontWeight: FontWeight.w300,color: Theme.of(context).primaryColor)
                                 ),
 

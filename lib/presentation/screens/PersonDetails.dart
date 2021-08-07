@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/presentation/tools/CustomAppBar.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class PersonDetails extends StatelessWidget {
     
     var personId = ModalRoute.of(context).settings.arguments as String;
     var provider = Provider.of<Justicedz>(context);
-
+    var textProvider = Provider.of<Texts>(context);
     var person = provider.getPersonById(personId);
 
 
@@ -63,7 +64,7 @@ class PersonDetails extends StatelessWidget {
 
                 Column(
                   children: <Widget>[
-                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey, text : "Profil"),
+                    CustomAppBar(width: _width, height: _height, scaffoldKey: _scaffoldKey, text : textProvider.profil()),
                     space(_height * 0.04),
 
                     Container(
@@ -117,17 +118,20 @@ class PersonDetails extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5)
                             ),
 
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                
-                                title("Maitre : ", _height, _width, context, Alignment.centerLeft,false),
-                                
-                                Container(
-                                  child: title(person.nom + " " + person.prenom, _height, _width, context, Alignment.centerLeft,true)
-                                ),
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  
+                                  title(textProvider.isFrench? "Maitre : " : "الأستاذ : ", _height, _width, context, Alignment.centerLeft,false),
+                                  
+                                  Container(
+                                    child: title(textProvider.isFrench? (person.nom + " " + person.prenom) : (person.nomAr+" "+person.prenomAr), _height, _width, context, Alignment.centerLeft,true)
+                                  ),
 
-                              ],
+                                ],
+                              ),
                             ),
                           ),
 
@@ -141,96 +145,21 @@ class PersonDetails extends StatelessWidget {
                               color: Colors.white.withOpacity(0.65),
                               borderRadius: BorderRadius.circular(5)
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
 
-                                title("Adresse postale : ", _height, _width, context, Alignment.centerLeft,false),
+                                  title(textProvider.isFrench? "Adresse postale : " : "عنوان : ", _height, _width, context, Alignment.centerLeft,false),
 
-                                Container(
-                                  child: title(person.adresse.adresse, _height, _width, context, Alignment.centerLeft,true)
-                                ),
+                                  Container(
+                                    child: title(person.adresse.adresse, _height, _width, context, Alignment.centerLeft,true)
+                                  ),
 
-                                // Expanded(child: SizedBox()),
-
-                                // IconButton(
-                                //   icon: Icon(Icons.explore), 
-                                //   onPressed: (){
-                                //     launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
-                                //   }
-                                // ),
-
-                              ],
-                            ),
-                          ),
-
-                          Container(
-
-                            margin: EdgeInsets.symmetric(
-                              vertical: _height *0.005
-                            ),
-
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.65),
-                              borderRadius: BorderRadius.circular(5)
-                            ),
-
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-
-                                title("N°Telephone : ", _height, _width, context, Alignment.centerLeft,false),
-
-                                Container(
-                                  child: title(person.numPhone, _height, _width, context, Alignment.centerLeft,true)
-                                ),
-
-                                Expanded(child: SizedBox()),
-
-                                IconButton(
-                                  icon: Icon(Icons.phone), 
-                                  onPressed: (){
-                                    launch("tel:"+person.numPhone);
-                                  }
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                          Container(
-
-                            margin: EdgeInsets.symmetric(
-                              vertical: _height *0.005
-                            ),
-
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.65),
-                              borderRadius: BorderRadius.circular(5)
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-
-                                title("GPS : ", _height, _width, context, Alignment.centerLeft,false),
-
-                                // Container(
-                                //   child: title("", _height, _width, context, Alignment.centerLeft,true)
-                                // ),
-
-                                Expanded(child: SizedBox()),
-
-                                IconButton(
-                                  icon: Icon(Icons.explore), 
-                                  onPressed: (){
-                                    launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
-                                  }
-                                ),
-
-                              ],
+                                ],
+                              ),
                             ),
                           ),
 
@@ -245,18 +174,67 @@ class PersonDetails extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5)
                             ),
 
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
 
-                                title("Horaire d'ouverture : ", _height, _width, context, Alignment.centerLeft,false),
+                                  title(textProvider.isFrench? "N°Telephone : " : "رقم الهاتف : ", _height, _width, context, Alignment.centerLeft,false),
 
-                                Container(
-                                  // width: _width *0.65,
-                                  child: title(person.horaire, _height, _width, context, Alignment.centerLeft,true)
-                                ),
-                              ],
+                                  Container(
+                                    child: title(person.numPhone, _height, _width, context, Alignment.centerLeft,true)
+                                  ),
+
+                                  Expanded(child: SizedBox()),
+
+                                  IconButton(
+                                    icon: Icon(Icons.phone), 
+                                    onPressed: (){
+                                      launch("tel:"+person.numPhone);
+                                    }
+                                  ),
+
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+
+                                  title("GPS : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                  // Container(
+                                  //   child: title("", _height, _width, context, Alignment.centerLeft,true)
+                                  // ),
+
+                                  Expanded(child: SizedBox()),
+
+                                  IconButton(
+                                    icon: Icon(Icons.explore), 
+                                    onPressed: (){
+                                      launch("https://www.google.com/maps/search/?api=1&query=${person.adresse.lat},${person.adresse.long}");
+                                    }
+                                  ),
+
+                                ],
+                              ),
                             ),
                           ),
 
@@ -271,18 +249,50 @@ class PersonDetails extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5)
                             ),
 
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
 
-                                title("Spécialité : ", _height, _width, context, Alignment.centerLeft,false),
+                                  title(textProvider.isFrench? "Horaire d'ouverture : " : "اوقات الفتح : ", _height, _width, context, Alignment.centerLeft,false),
 
-                                Container(
-                                  // width: _width *0.65,
-                                  child: title(person.categorie.nom, _height, _width, context, Alignment.centerLeft,true)
-                                ),
-                              ],
+                                  Container(
+                                    // width: _width *0.65,
+                                    child: title(person.horaire, _height, _width, context, Alignment.centerLeft,true)
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Container(
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: _height *0.005
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.65),
+                              borderRadius: BorderRadius.circular(5)
+                            ),
+
+                            child: Directionality(
+                              textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+
+                                  title(textProvider.isFrench?"Spécialité : " : "التخصص : ", _height, _width, context, Alignment.centerLeft,false),
+
+                                  Container(
+                                    // width: _width *0.65,
+                                    child: title(textProvider.isFrench?person.categorie.nom : person.categorie.nomAr, _height, _width, context, Alignment.centerLeft,true)
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
 

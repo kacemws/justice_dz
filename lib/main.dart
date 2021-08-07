@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:justice_dz/models/Justicedz.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/auth.dart';
 import 'package:justice_dz/presentation/screens/About.dart';
 import 'package:justice_dz/presentation/screens/ContactUs.dart';
@@ -11,10 +12,15 @@ import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/screens/SignupScreen.dart';
 import 'package:justice_dz/presentation/screens/SplashScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'presentation/screens/PersonDetails.dart';
 
-void main() => runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 
@@ -59,6 +65,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context)=>Auth()
+        ),
+        ChangeNotifierProvider(
+          create: (context)=>Texts(),
         )
       ],
 

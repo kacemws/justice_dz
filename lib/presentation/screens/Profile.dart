@@ -5,6 +5,7 @@ import 'package:justice_dz/models/Justicedz.dart';
 import 'package:justice_dz/models/data/Person.dart';
 import 'package:justice_dz/presentation/screens/SignIn.dart';
 import 'package:justice_dz/presentation/tools/CustomDrawer.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,10 +21,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Map<String,String> values = {
     "nom" : "",
     "prenom" : "",
+    "nomAr" : "",
+    "prenomAr" : "",
     "tel" : "",
     "adresse" : "",
     "horaire" : "",
-    "details" : "",
   };
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -31,18 +33,30 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final FocusNode nom = FocusNode();
   TextEditingController nomController = TextEditingController(text: "");
+
+  final FocusNode nomAr = FocusNode();
+  TextEditingController nomArController = TextEditingController(text: "");
+
   final FocusNode prenom = FocusNode();
   TextEditingController prenomController = TextEditingController(text: "");
+  
+  final FocusNode prenomAr = FocusNode();
+  TextEditingController prenomArController = TextEditingController(text: "");
+
   final FocusNode tel = FocusNode();
   TextEditingController telController = TextEditingController(text: "");
+
   final FocusNode adresse = FocusNode();
   TextEditingController adresseController = TextEditingController(text: "");
+
   final FocusNode horaire = FocusNode();
   TextEditingController horaireController = TextEditingController(text: "");
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<Justicedz>(context);
+    var textProvider = Provider.of<Texts>(context);
+
     loggedIn = provider.getPersonById(widget.userId);
 
     if(nomController.text == ""){
@@ -51,6 +65,14 @@ class _ProfilePageState extends State<ProfilePage> {
     if(prenomController.text == ""){
       prenomController.text = loggedIn.prenom;
     }
+
+    if(nomArController.text == ""){
+      nomArController.text = loggedIn.nomAr;
+    }
+    if(prenomArController.text == ""){
+      prenomArController.text = loggedIn.prenomAr;
+    }
+
     if(telController.text == ""){
       telController.text = loggedIn.numPhone;
     }
@@ -86,7 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
         var aux = Person(
           id: loggedIn.id,
           nom: values["nom"],
+          nomAr: values["nomAr"],
           prenom: values["prenom"],
+          prenomAr: values["prenomAr"],
           numPhone: values["tel"],
           email: loggedIn.email,
           horaire: values["horaire"],
@@ -106,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     var _appBar = AppBar(
-      title: Text("Profil"),
+      title: Text(textProvider.profil()),
       centerTitle: true,
       actions: <Widget>[
         IconButton(icon: Icon(Icons.exit_to_app), onPressed: (){
@@ -186,35 +210,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                   horizontal: _width * 0.05,
                                   vertical: (_height) *0.00075
                                 ),
-                                child: TextFormField(
 
-                                  focusNode: nom,
-                                  controller: nomController,
-                                  cursorColor: Theme.of(context).primaryColor,
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
+                       
+                                    focusNode: nom,
+                                    controller: nomController,
+                                    cursorColor: Theme.of(context).primaryColor,
 
-                                  decoration: InputDecoration(
+                                    decoration: InputDecoration(
 
-                                    labelText: "Nom : ",
+                                      labelText: textProvider.nomFr(),
 
-                                    labelStyle: Theme.of(context).textTheme.headline6,
-                                                              
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(nomAr);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty) return "Veuillez Introduire Un nom Valide";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["nom"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
                                   ),
-
-                                  onFieldSubmitted: (_){
-                                    FocusScope.of(context).requestFocus(prenom);// move to the other textfield
-                                  },
-
-                                  validator: (value){
-                                    if(value.isEmpty) return "Veuillez Introduire Un nom Valide";
-                                    return null;
-                                  },
-
-                                  onSaved: (value){
-                                    this.values["nom"] = value;
-                                  },
-
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.next,
                                 ),
                               ),
 
@@ -226,35 +254,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                   horizontal: _width * 0.05,
                                   vertical: (_height) *0.00075
                                 ),
-                                child: TextFormField(
 
-                                  focusNode: prenom,
-                                  controller: prenomController,
-                                  cursorColor: Theme.of(context).primaryColor,
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
+                       
+                                    focusNode: nomAr,
+                                    controller: nomArController,
+                                    cursorColor: Theme.of(context).primaryColor,
 
-                                  decoration: InputDecoration(
+                                    decoration: InputDecoration(
 
-                                    labelText: "Prénoms : ",
+                                      labelText: textProvider.nomAr(),
 
-                                    labelStyle: Theme.of(context).textTheme.headline6,
-                                                              
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(prenom);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty) return "Veuillez Introduire Un nom Valide";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["nomAr"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
                                   ),
-
-                                  onFieldSubmitted: (_){
-                                    FocusScope.of(context).requestFocus(tel);// move to the other textfield
-                                  },
-
-                                  validator: (value){
-                                    if(value.isEmpty) return "Veuillez Introduire Un prenom Valide";
-                                    return null;
-                                  },
-
-                                  onSaved: (value){
-                                    this.values["prenom"] = value;
-                                  },
-
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.next,
                                 ),
                               ),
 
@@ -266,35 +298,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                   horizontal: _width * 0.05,
                                   vertical: (_height) *0.00075
                                 ),
-                                child: TextFormField(
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
 
-                                  focusNode: tel,
-                                  controller: telController,
-                                  cursorColor: Theme.of(context).primaryColor,
+                                    focusNode: prenom,
+                                    controller: prenomController,
+                                    cursorColor: Theme.of(context).primaryColor,
 
-                                  decoration: InputDecoration(
+                                    decoration: InputDecoration(
 
-                                    labelText: "N° de téléphone : ",
+                                      labelText: textProvider.prenomFr(),
 
-                                    labelStyle: Theme.of(context).textTheme.headline6,
-                                                              
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(prenomAr);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty) return "Veuillez Introduire Un prenom Valide";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["prenom"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
                                   ),
-
-                                  onFieldSubmitted: (_){
-                                    FocusScope.of(context).requestFocus(adresse);// move to the other textfield
-                                  },
-
-                                  validator: (value){
-                                    if(value.isEmpty || (!value.startsWith("07") && !value.startsWith("05") && !value.startsWith("06"))) return "Veuillez Introduire un numéro Valide";
-                                    return null;
-                                  },
-
-                                  onSaved: (value){
-                                    this.values["tel"] = value;
-                                  },
-
-                                  keyboardType: TextInputType.number,
-                                  textInputAction: TextInputAction.next,
                                 ),
                               ),
 
@@ -306,35 +341,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                   horizontal: _width * 0.05,
                                   vertical: (_height) *0.00075
                                 ),
-                                child: TextFormField(
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
 
-                                  focusNode: adresse,
-                                  controller: adresseController,
-                                  cursorColor: Theme.of(context).primaryColor,
+                                    focusNode: prenomAr,
+                                    controller: prenomArController,
+                                    cursorColor: Theme.of(context).primaryColor,
 
-                                  decoration: InputDecoration(
+                                    decoration: InputDecoration(
 
-                                    labelText: "Adresse exacte : ",
+                                      labelText: textProvider.prenomAr(),
 
-                                    labelStyle: Theme.of(context).textTheme.headline6,
-                                                              
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(tel);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty) return "Veuillez Introduire Un prenom Valide";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["prenomAr"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
                                   ),
-
-                                  onFieldSubmitted: (_){
-                                    FocusScope.of(context).requestFocus(horaire);// move to the other textfield
-                                  },
-
-                                  validator: (value){
-                                    if(value.isEmpty ) return "Veuillez Introduire une adresse Valide";
-                                    return null;
-                                  },
-
-                                  onSaved: (value){
-                                    this.values["adresse"] = value;
-                                  },
-
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.next,
                                 ),
                               ),
 
@@ -346,36 +384,125 @@ class _ProfilePageState extends State<ProfilePage> {
                                   horizontal: _width * 0.05,
                                   vertical: (_height) *0.00075
                                 ),
-                                child: TextFormField(
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
 
-                                  focusNode: horaire,
-                                  controller: horaireController,
-                                  cursorColor: Theme.of(context).primaryColor,
+                                    focusNode: tel,
+                                    controller: telController,
+                                    cursorColor: Theme.of(context).primaryColor,
 
-                                  decoration: InputDecoration(
+                                    decoration: InputDecoration(
 
-                                    labelText: "Horaire d'ouverture : ",
+                                      labelText: textProvider.numero(),
 
-                                    labelStyle: Theme.of(context).textTheme.headline6,
-                                                              
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(adresse);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty || (!value.startsWith("07") && !value.startsWith("05") && !value.startsWith("06"))) return textProvider.isFrench? "Veuillez Introduire un numéro Valide" : "الرجاء إدخال قيمة صالحة";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["tel"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.number,
+                                    textInputAction: TextInputAction.next,
                                   ),
+                                ),
+                              ),
 
-                                  onFieldSubmitted: (_){
-                                    // FocusScope.of(context).requestFocus(horaire);// move to the other textfield
-                                    _saveFields();
-                                  },
+                              Container(
 
-                                  validator: (value){
-                                    if(value.isEmpty ) return "Veuillez Introduire une valeur Valide";
-                                    return null;
-                                  },
+                                width: _width,
 
-                                  onSaved: (value){
-                                    this.values["horaire"] = value;
-                                  },
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: _width * 0.05,
+                                  vertical: (_height) *0.00075
+                                ),
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
 
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
+                                    focusNode: adresse,
+                                    controller: adresseController,
+                                    cursorColor: Theme.of(context).primaryColor,
+
+                                    decoration: InputDecoration(
+
+                                      labelText: textProvider.adresse(),
+
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      FocusScope.of(context).requestFocus(horaire);// move to the other textfield
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty ) return textProvider.isFrench? "Veuillez Introduire une adresse Valide" : "الرجاء إدخال قيمة صالحة";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["adresse"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                ),
+                              ),
+
+                              Container(
+
+                                width: _width,
+
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: _width * 0.05,
+                                  vertical: (_height) *0.00075
+                                ),
+                                child: Directionality(
+                                  textDirection: textProvider.isFrench? TextDirection.ltr : TextDirection.rtl,
+                                  child: TextFormField(
+
+                                    focusNode: horaire,
+                                    controller: horaireController,
+                                    cursorColor: Theme.of(context).primaryColor,
+
+                                    decoration: InputDecoration(
+
+                                      labelText: textProvider.horraire(),
+
+                                      labelStyle: Theme.of(context).textTheme.headline6,
+                                                                
+                                    ),
+
+                                    onFieldSubmitted: (_){
+                                      // FocusScope.of(context).requestFocus(horaire);// move to the other textfield
+                                      _saveFields();
+                                    },
+
+                                    validator: (value){
+                                      if(value.isEmpty ) return textProvider.isFrench? "Veuillez Introduire une valeur Valide" : "الرجاء إدخال قيمة صالحة";
+                                      return null;
+                                    },
+
+                                    onSaved: (value){
+                                      this.values["horaire"] = value;
+                                    },
+
+                                    keyboardType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                  ),
                                 ),
                               ),
 

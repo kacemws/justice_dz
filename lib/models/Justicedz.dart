@@ -16,21 +16,20 @@ class Justicedz with ChangeNotifier{
   String userId;
   bool loaded = false;
 
-  final Firestore _db = Firestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   SharedPreferences prefs ;
 
   List<Wilaya> wilayas = [
-    Wilaya(id: "all", nom: "Toute l'Algérie")
   ];
 
   List<Categorie> categories = [
-    Categorie(id : "all", nom: "Tous"),
-    Categorie(id : "c1", nom:"Expert"),
-    Categorie(id : "c2", nom: "Avocat"),
-    Categorie(id : "c3", nom:"Notaire"),
-    Categorie(id: "c4", nom: "Huissier de justice"),
-    Categorie(id : "c5", nom:"Municipale"),
+    Categorie(id : "all", nom: "Tous", nomAr: "الكل"),
+    Categorie(id : "c1", nom:"Expert", nomAr: "خبير"),
+    Categorie(id : "c2", nom: "Avocat", nomAr: "محامي"),
+    Categorie(id : "c3", nom:"Notaire", nomAr: "كاتب عدل"),
+    Categorie(id: "c4", nom: "Huissier de justice", nomAr: "حاجب محكمة"),
+    Categorie(id : "c5", nom:"Municipale", nomAr: "محكمة"),
   ];
 
   Wilaya selectedWilaya;
@@ -83,7 +82,7 @@ class Justicedz with ChangeNotifier{
 
       peoples.forEach((person){
         if(person.wilaya == selectedWilaya){
-          if(selectedCommune.nom == "Tous" || person.commune == selectedCommune)
+          if(selectedCommune.id == selectedWilaya.id+"_all" || person.commune == selectedCommune)
             aux.add(person);
         }
       });
@@ -98,7 +97,7 @@ class Justicedz with ChangeNotifier{
 
       peoples.forEach((person){
         if(person.wilaya == selectedWilaya && person.categorie == selectedCategorie){
-          if(selectedCommune.nom == "Tous" || person.commune == selectedCommune)
+          if(selectedCommune.id == selectedWilaya.id+"_all" || person.commune == selectedCommune)
             aux.add(person);
         }
       });
@@ -142,56 +141,62 @@ class Justicedz with ChangeNotifier{
     this.fetchFavs();
     loaded = true;
     print("done");
-
     notifyListeners();
     
   }
 
   Future<void> fetchWilayas() async{
-    var snapshot = await _db.collection("Wilaya").getDocuments();
-    wilayas.clear();
+    try{
+      var snapshot = await _db.collection("Wilaya").get();
+      wilayas.clear();
 
-    wilayas.add(
-      Wilaya(id: "all", nom: "Tous")
-    );
-
-    snapshot.documents.forEach((document){
-
-      var data = document.data;
-
-      var aux = Wilaya(
-        id: document.documentID, 
-        nom: data["nom"], 
+      wilayas.add(
+        Wilaya(id: "all", nom: "Toute l'Algérie", nomAr: "كل الجزائر")
       );
 
-      print("got : " + aux.id);
+      snapshot.docs.forEach((document){
 
-      wilayas.add(aux);
-      
-    });
+        var data = document.data();
+
+        var aux = Wilaya(
+          id: document.id, 
+          nom: data["nom"], 
+          nomAr: data["nomAr"]
+        );
+
+        print("got : " + aux.id);
+
+        wilayas.add(aux);
+        
+      });
+    }catch(error){
+      print(error);
+    }
   }
 
   Future<void> fetchCommunes() async{
-    var snapshot = await _db.collection("Communes").getDocuments();
+    var snapshot = await _db.collection("Communes").get();
 
     wilayas.forEach((wilaya){
       wilaya.communes = [];
       wilaya.communes.add(
         Commune(
           id: wilaya.id+"_all", 
-          nom: "Tous", 
+          nom: "Toute la wilaya",
+          nomAr: "كل الولاية", 
           wilaya: wilaya
         )
       );
     });
 
-    snapshot.documents.forEach((document){
+    snapshot.docs.forEach((document){
 
-      var data = document.data;
+      var data = document.data();
 
       var aux = Commune(
-        id: document.documentID, 
+        id: document.id, 
         nom: data["nom"], 
+        nomAr: data["nomAr"],
         wilaya: getWilayaById(data["wilaya"])
       );
 
@@ -204,11 +209,11 @@ class Justicedz with ChangeNotifier{
 
   Future<void> fetchPeople() async{
 
-    var snapshot = await _db.collection("People").getDocuments();
+    var snapshot = await _db.collection("People").get();
     peoples.clear();
-    snapshot.documents.forEach((document){
+    snapshot.docs.forEach((document){
 
-      var data = document.data;
+      var data = document.data();
 
       var adresse = Adresse(
         lat: data["adresse"]["lat"], 
@@ -217,9 +222,11 @@ class Justicedz with ChangeNotifier{
       );
 
       var aux = Person(
-        id: document.documentID, 
+        id: document.id, 
         nom: data["nom"], 
-        prenom: data["prenom"], 
+        nomAr: data["nomAr"],
+        prenom: data["prenom"],
+        prenomAr: data["prenomAr"], 
         email: data["email"], 
         numPhone: data["numPhone"], 
         adresse: adresse, 
@@ -299,7 +306,7 @@ class Justicedz with ChangeNotifier{
   }
 
   Future<void> updateUser(Person updated) async{
-    await _db.collection("People").document(updated.id).updateData({
+    await _db.collection("People").doc(updated.id).update({
       "nom" : updated.nom,
       "prenom" : updated.prenom,
       "numPhone" : updated.numPhone,

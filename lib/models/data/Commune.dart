@@ -6,6 +6,6 @@ class Commune{
   final String id;
   final String nom;
   final Wilaya wilaya;
-
-  Commune({@required this.id, @required this.nom, @required this.wilaya});
+  final String nomAr;
+  Commune({@required this.id, @required this.nom, @required this.wilaya, @required this.nomAr});
 }

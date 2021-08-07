@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:justice_dz/models/Texts.dart';
 import 'package:justice_dz/models/data/Categorie.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,7 @@ class CatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cat = Provider.of<Categorie>(context);
-    
+    var textProvider = Provider.of<Texts>(context);
 
     return LayoutBuilder(
 
@@ -41,7 +42,7 @@ class CatItem extends StatelessWidget {
                 fit: BoxFit.scaleDown,
               ),
               Text(
-                cat.nom.toUpperCase(),
+                textProvider.isFrench?cat.nom.toUpperCase() : cat.nomAr,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.subtitle2.copyWith(
                   fontWeight: FontWeight.bold
